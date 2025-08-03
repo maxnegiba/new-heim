@@ -252,6 +252,9 @@ $required_css_files = getRequiredCSSFiles($current_page, $assets_path, $is_home)
     
     <!-- JavaScript - încărcare deferred -->
     <script src="<?= $assets_path ?>js/main.js" defer></script>
+    <!-- Modulul pentru meniul mobil -->
+    <script src="<?= $assets_path ?>js/modules/mobile-menu.js" defer></script>
+    <!-- Alte biblioteci -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer crossorigin></script>
    
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.5/dist/js/lightbox.min.js" defer crossorigin></script>
