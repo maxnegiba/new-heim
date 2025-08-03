@@ -1,0 +1,5 @@
+@media print {
+  .hero-video, .swiper-button-next, .swiper-button-prev, .floating-buttons { display:none !important; }
+  * { background:transparent !important; color:#000 !important; box-shadow:none !important; }
+  a[href]:after{content:" (" attr(href) ")"}
+}

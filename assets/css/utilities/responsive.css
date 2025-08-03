@@ -1,0 +1,21 @@
+/* Mobile First Approach */
+@media (max-width: var(--mobile)) {
+  /* Mobile styles */
+  .hero-content h1 { font-size: 2rem; }
+  .service-card { padding: 1.5rem; }
+}
+
+@media (min-width: calc(var(--mobile) + 1px)) and (max-width: var(--tablet)) {
+  /* Tablet styles */
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: calc(var(--tablet) + 1px)) and (max-width: 1200px) {
+  /* Desktop small styles */
+  .services-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1201px) {
+  /* Desktop large styles */
+  .services-grid { grid-template-columns: repeat(4, 1fr); }
+}
