@@ -1,4 +1,5 @@
 <?php
+// db.php
 $host = 'localhost';
 $db   = 'hausmeister_blog';
 $user = 'hausmeister_user';
