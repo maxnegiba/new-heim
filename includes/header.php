@@ -225,8 +225,10 @@ $required_css_files = getRequiredCSSFiles($current_page, $assets_path, $is_home)
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css"></noscript>
 
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-      as="style" onload="this.onload=null;this.rel='stylesheet'" media="print">
+ <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+      as="style" onload="this.onload=null;this.rel='stylesheet';this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></noscript>
+
 
     <!-- JavaScript - încărcare deferred -->
     <script src="<?= $assets_path ?>js/main.js" defer></script>
