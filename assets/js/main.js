@@ -588,16 +588,6 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.documentElement.style.scrollBehavior = 'auto';
 }
 
-/* ---------------------------------------------------------
-   8.  PERFORMANCE – Preload critical assets
---------------------------------------------------------- */
-const preload = (href, as = 'image') => {
-  const l = document.createElement('link');
-  l.rel = 'preload';
-  l.href = href;
-  l.as = as;
-  document.head.appendChild(l);
-};
 
 /* Preload first video poster & fonts */
 document.addEventListener('DOMContentLoaded', () => {
