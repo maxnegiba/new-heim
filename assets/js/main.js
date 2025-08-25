@@ -1,4 +1,3 @@
-
 /* =========================================================
    MAIN.JS – MeisterDach Website Core
    Version: 3.0 | Last update: 2024-07-19
@@ -47,7 +46,69 @@ window.addEventListener('resize', debounce(syncHeroPadding));
 document.addEventListener('DOMContentLoaded', syncHeroPadding);
 
 /* ---------------------------------------------------------
-   3.  HERO VIDEO LAZY-LOAD & AUTOPLAY
+   3.  MOBILE MENU FUNCTIONALITY
+--------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburger = document.querySelector('.hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const mobileMenuLinks = document.querySelectorAll('.mobile-menu a');
+  const body = document.body;
+
+  if (!hamburger || !mobileMenu) return;
+
+  // Toggle mobile menu
+  function toggleMobileMenu() {
+    const isOpen = hamburger.classList.contains('is-active');
+    
+    hamburger.classList.toggle('is-active', !isOpen);
+    mobileMenu.classList.toggle('is-active', !isOpen);
+    body.classList.toggle('no-scroll', !isOpen);
+    
+    // Set ARIA attributes
+    hamburger.setAttribute('aria-expanded', !isOpen);
+    mobileMenu.setAttribute('aria-hidden', isOpen);
+  }
+
+  // Close mobile menu
+  function closeMobileMenu() {
+    hamburger.classList.remove('is-active');
+    mobileMenu.classList.remove('is-active');
+    body.classList.remove('no-scroll');
+    
+    // Set ARIA attributes
+    hamburger.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  }
+
+  // Event listeners
+  hamburger.addEventListener('click', toggleMobileMenu);
+  
+  // Close menu when clicking on links
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // Close menu on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+    }
+  });
+
+  // Set initial ARIA attributes
+  hamburger.setAttribute('aria-expanded', 'false');
+  mobileMenu.setAttribute('aria-hidden', 'true');
+});
+
+/* ---------------------------------------------------------
+   4.  HERO VIDEO LAZY-LOAD & AUTOPLAY
 --------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
   const heroVideo = document.querySelector('.hero-video');
@@ -595,6 +656,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   preload('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap', 'style');
 });
-
-
-
