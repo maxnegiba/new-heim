@@ -19,7 +19,7 @@ include(__DIR__ . '/includes/header.php');
            playsinline
            preload="metadata"
            >
-        <source src="<?= $assets_path ?>video/hero-video.webm" type="video/webm">
+       
         <source src="<?= $assets_path ?>video/hero-video.mp4" type="video/mp4">
     </video>
     <!-- Overlay -->
