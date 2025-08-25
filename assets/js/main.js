@@ -1,3 +1,4 @@
+
 /* =========================================================
    MAIN.JS – MeisterDach Website Core
    Version: 3.0 | Last update: 2024-07-19
@@ -9,6 +10,7 @@
    • Accessibility helpers
    • Performance optimisations
 ========================================================= */
+
 /* ---------------------------------------------------------
    1.  CONFIG / UTILS
 --------------------------------------------------------- */
@@ -17,21 +19,25 @@ const CONFIG = {
   autoplayDelay: 6000,
   rootPath: window.location.origin + '/'
 };
+
 /* Throttle / debounce helpers */
 const debounce = (fn, wait = CONFIG.debounceDelay) => {
   let t;
   return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), wait); };
 };
+
 /* ---------------------------------------------------------
    2.  HEADER SCROLL EFFECT
 --------------------------------------------------------- */
 const header = document.querySelector('.header');
 const heroSection = document.querySelector('.hero-section');
+
 function updateHeaderState() {
   if (!header) return;
   header.classList.toggle('scrolled', window.scrollY > 50);
 }
 window.addEventListener('scroll', debounce(updateHeaderState, 50));
+
 /* Adjust hero padding when header resizes */
 function syncHeroPadding() {
   if (!heroSection || !header) return;
@@ -39,17 +45,21 @@ function syncHeroPadding() {
 }
 window.addEventListener('resize', debounce(syncHeroPadding));
 document.addEventListener('DOMContentLoaded', syncHeroPadding);
+
 /* ---------------------------------------------------------
    3.  HERO VIDEO LAZY-LOAD & AUTOPLAY
 --------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
   const heroVideo = document.querySelector('.hero-video');
   if (!heroVideo) return;
+
   heroVideo.setAttribute('data-loading', 'true');
+
   heroVideo.addEventListener('loadeddata', () => {
     heroVideo.setAttribute('data-loaded', 'true');
     heroVideo.removeAttribute('data-loading');
   });
+
   /* Fallback if video fails to load */
   setTimeout(() => {
     if (!heroVideo.hasAttribute('data-loaded')) {
@@ -57,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
       heroVideo.removeAttribute('data-loading');
     }
   }, 3500);
+
   /* Try autoplay. If blocked, show fallback image */
   const playPromise = heroVideo.play();
   if (playPromise !== undefined) {
@@ -66,9 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 /* ==========================================================================
    ENHANCED CINEMATIC SWIPER INITIALIZATION
 ========================================================================== */
+
 class CinematicCarousel {
   constructor() {
     this.swiper = null;
@@ -80,6 +93,7 @@ class CinematicCarousel {
     
     this.init();
   }
+
   init() {
     // Wait for DOM to be ready
     if (document.readyState === 'loading') {
@@ -88,9 +102,11 @@ class CinematicCarousel {
       this.initializeCarousel();
     }
   }
+
   initializeCarousel() {
     const carouselElement = document.querySelector('.videoProjectsSwiper');
     if (!carouselElement) return;
+
     // Initialize components
     this.initializeElements();
     this.preloadVideos();
@@ -103,6 +119,7 @@ class CinematicCarousel {
       document.querySelector('.cinematic-carousel')?.classList.remove('loading');
     }, 500);
   }
+
   initializeElements() {
     this.autoplayProgress = document.querySelector('.swiper-autoplay-progress circle');
     this.progressBar = document.querySelector('.progress-bar');
@@ -112,6 +129,7 @@ class CinematicCarousel {
     };
     this.videos = document.querySelectorAll('.bg-video');
   }
+
   preloadVideos() {
     this.videos.forEach((video, index) => {
       // Set loading priority
@@ -121,6 +139,7 @@ class CinematicCarousel {
       video.addEventListener('loadeddata', () => {
         video.classList.add('loaded');
       });
+
       // Handle video errors
       video.addEventListener('error', () => {
         console.warn(`Video ${index + 1} failed to load`);
@@ -128,6 +147,7 @@ class CinematicCarousel {
       });
     });
   }
+
   initializeSwiper() {
     const swiperElement = document.querySelector('.videoProjectsSwiper');
     
@@ -205,8 +225,10 @@ class CinematicCarousel {
         },
       },
     });
+
     this.isInitialized = true;
   }
+
   onSwiperInit(swiper) {
     // Update slide counter
     this.updateSlideCounter(swiper);
@@ -222,6 +244,7 @@ class CinematicCarousel {
     // Set initial progress
     this.updateProgressBar(0);
   }
+
   onSlideChange(swiper) {
     // Update slide counter
     this.updateSlideCounter(swiper);
@@ -239,10 +262,12 @@ class CinematicCarousel {
     // Announce slide change for screen readers
     this.announceSlideChange(swiper.realIndex + 1);
   }
+
   getTotalUniqueSlides(swiper) {
     // Calculează numărul de slide-uri unice, excluzând duplicatele din loop
     return swiper.slides.filter(slide => !slide.classList.contains('swiper-slide-duplicate')).length;
   }
+
   handleVideoTransition() {
     // Pause all videos first
     this.pauseAllVideos();
@@ -252,6 +277,7 @@ class CinematicCarousel {
       this.playActiveVideo();
     }, 300);
   }
+
   playActiveVideo() {
     if (!this.swiper) return;
     
@@ -271,6 +297,7 @@ class CinematicCarousel {
       });
     }
   }
+
   pauseAllVideos() {
     this.videos.forEach(video => {
       if (!video.paused) {
@@ -278,6 +305,7 @@ class CinematicCarousel {
       }
     });
   }
+
   updateSlideCounter(swiper) {
     if (!this.slideCounter.current || !this.slideCounter.total) return;
     
@@ -288,6 +316,7 @@ class CinematicCarousel {
     this.slideCounter.current.textContent = current;
     this.slideCounter.total.textContent = total;
   }
+
   updateAutoplayProgress(progress) {
     if (!this.autoplayProgress) return;
     
@@ -297,17 +326,21 @@ class CinematicCarousel {
     this.autoplayProgress.style.strokeDashoffset = offset;
     this.autoplayProgress.style.stroke = progress > 0.8 ? '#d32f2f' : 'rgba(255,255,255,0.6)';
   }
+
   updateProgressBar(progress) {
     if (!this.progressBar) return;
     
     this.progressBar.style.width = `${progress}%`;
   }
+
   onAutoplayStart() {
     document.querySelector('.swiper-autoplay-progress')?.classList.add('active');
   }
+
   onAutoplayStop() {
     document.querySelector('.swiper-autoplay-progress')?.classList.remove('active');
   }
+
   refreshSlideAnimations() {
     // Reset and trigger AOS animations for current slide
     if (typeof AOS !== 'undefined') {
@@ -323,6 +356,7 @@ class CinematicCarousel {
       }
     }
   }
+
   announceSlideChange(slideNumber) {
     // Create announcement for screen readers
     const announcement = document.createElement('div');
@@ -337,20 +371,24 @@ class CinematicCarousel {
       document.body.removeChild(announcement);
     }, 1000);
   }
+
   setupEventListeners() {
     const carousel = document.querySelector('.cinematic-carousel');
     if (!carousel) return;
+
     // Pause/resume on hover
     carousel.addEventListener('mouseenter', () => {
       if (this.swiper?.autoplay) {
         this.swiper.autoplay.stop();
       }
     });
+
     carousel.addEventListener('mouseleave', () => {
       if (this.swiper?.autoplay) {
         this.swiper.autoplay.start();
       }
     });
+
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (!this.swiper) return;
@@ -370,6 +408,7 @@ class CinematicCarousel {
           break;
       }
     });
+
     // Visibility change handling
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
@@ -380,12 +419,15 @@ class CinematicCarousel {
         this.swiper?.autoplay?.start();
       }
     });
+
     // Intersection Observer for performance
     this.setupIntersectionObserver();
   }
+
   setupIntersectionObserver() {
     const carousel = document.querySelector('.cinematic-carousel');
     if (!carousel) return;
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -401,8 +443,10 @@ class CinematicCarousel {
     }, {
       threshold: 0.5
     });
+
     observer.observe(carousel);
   }
+
   initializeAnimations() {
     // Initialize AOS if available
     if (typeof AOS !== 'undefined') {
@@ -414,6 +458,7 @@ class CinematicCarousel {
         offset: 100,
       });
     }
+
     // Add entrance animations
     const carousel = document.querySelector('.cinematic-carousel');
     if (carousel) {
@@ -427,6 +472,7 @@ class CinematicCarousel {
       }, 100);
     }
   }
+
   toggleAutoplay() {
     if (!this.swiper?.autoplay) return;
     
@@ -436,22 +482,26 @@ class CinematicCarousel {
       this.swiper.autoplay.start();
     }
   }
+
   // Public methods for external control
   goToSlide(index) {
     if (this.swiper) {
       this.swiper.slideTo(index);
     }
   }
+
   nextSlide() {
     if (this.swiper) {
       this.swiper.slideNext();
     }
   }
+
   prevSlide() {
     if (this.swiper) {
       this.swiper.slidePrev();
     }
   }
+
   destroy() {
     if (this.swiper) {
       this.pauseAllVideos();
@@ -460,6 +510,7 @@ class CinematicCarousel {
       this.isInitialized = false;
     }
   }
+
   // Performance monitoring
   getPerformanceMetrics() {
     return {
@@ -472,89 +523,23 @@ class CinematicCarousel {
     };
   }
 }
+
 // Initialize carousel when DOM is ready
 let cinematicCarousel;
+
 document.addEventListener('DOMContentLoaded', () => {
   cinematicCarousel = new CinematicCarousel();
 });
+
 // Cleanup on page unload
 window.addEventListener('beforeunload', () => {
   if (cinematicCarousel) {
     cinematicCarousel.destroy();
   }
 });
+
 // Export for external use
 window.CinematicCarousel = CinematicCarousel;
-
-/* ---------------------------------------------------------
-   5.  MOBILE MENU
---------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-  const hamburger = document.querySelector('.hamburger');
-  const navMenu = document.querySelector('.nav-menu');
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  // Check if elements exist
-  if (!hamburger || !navMenu) return;
-  
-  // Toggle mobile menu
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-    
-    // Update ARIA attributes
-    const isExpanded = hamburger.classList.contains('active');
-    hamburger.setAttribute('aria-expanded', isExpanded);
-    
-    // Prevent body scroll when menu is open
-    document.body.style.overflow = isExpanded ? 'hidden' : '';
-  });
-  
-  // Close menu when clicking on a link
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      navMenu.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    });
-  });
-  
-  // Close menu when clicking outside
-  document.addEventListener('click', (event) => {
-    const isClickInsideMenu = navMenu.contains(event.target);
-    const isClickOnHamburger = hamburger.contains(event.target);
-    
-    if (!isClickInsideMenu && !isClickOnHamburger && navMenu.classList.contains('active')) {
-      hamburger.classList.remove('active');
-      navMenu.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-  });
-  
-  // Close menu on escape key
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && navMenu.classList.contains('active')) {
-      hamburger.classList.remove('active');
-      navMenu.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-  });
-  
-  // Handle window resize
-  const handleResize = debounce(() => {
-    if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-      hamburger.classList.remove('active');
-      navMenu.classList.remove('active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-  }, 150);
-  
-  window.addEventListener('resize', handleResize);
-});
 
 /* ---------------------------------------------------------
    6.  LAZY MODULES
@@ -562,6 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initProjectsSwiper() {
   const el = document.querySelector('.projectsSwiper'); // Presupunem un selector generic; ajustează dacă este necesar
   if (!el) return;
+
   new Swiper(el, {
     loop: true,
     spaceBetween: 10,
@@ -580,8 +566,10 @@ function initProjectsSwiper() {
     },
   });
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   initProjectsSwiper();
+
   /* Dynamically import project-specific modules */
   if (document.querySelector('#gallery')) {
     import('./modules/projects.js').then(m => m.default?.());
@@ -590,6 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./modules/contact-form.js').then(m => m.initContactForm?.());
   }
 });
+
 /* ---------------------------------------------------------
    7.  ACCESSIBILITY & REDUCED MOTION
 --------------------------------------------------------- */
@@ -599,8 +588,23 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.documentElement.style.scrollBehavior = 'auto';
 }
 
+/* ---------------------------------------------------------
+   8.  PERFORMANCE – Preload critical assets
+--------------------------------------------------------- */
+const preload = (href, as = 'image') => {
+  const l = document.createElement('link');
+  l.rel = 'preload';
+  l.href = href;
+  l.as = as;
+  document.head.appendChild(l);
+};
+
 /* Preload first video poster & fonts */
 document.addEventListener('DOMContentLoaded', () => {
  // Optional — or remove this line entirely:
+
   preload('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap', 'style');
 });
+
+
+
