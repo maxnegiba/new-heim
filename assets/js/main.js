@@ -578,62 +578,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./modules/contact-form.js').then(m => m.initContactForm?.());
   }
 });
-/* ---------------------------------------------------------
-5. MOBILE MENU HANDLING
---------------------------------------------------------- */
-function initMobileMenu() {
-  const burger = document.querySelector('.hamburger');
-  const menu = document.querySelector('.mobile-menu');
-  const body = document.body;
-
-  if (!burger || !menu) return;
-
-  const toggleMenu = () => {
-    const isOpen = menu.classList.toggle('is-open');
-    burger.classList.toggle('is-active', isOpen);
-    body.classList.toggle('menu-open', isOpen);
-
-    // Prevent background scroll when menu is open
-    if (isOpen) {
-      body.style.overflow = 'hidden';
-      burger.setAttribute('aria-expanded', 'true');
-    } else {
-      body.style.overflow = '';
-      burger.setAttribute('aria-expanded', 'false');
-    }
-  };
-
-  burger.addEventListener('click', toggleMenu);
-
-  // Close menu when clicking a nav link
-  menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      if (menu.classList.contains('is-open')) {
-        toggleMenu();
-      }
-    });
-  });
-
-  // Close on ESC
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && menu.classList.contains('is-open')) {
-      toggleMenu();
-    }
-  });
-
-  // Optional: close when clicking outside
-  document.addEventListener('click', e => {
-    if (
-      menu.classList.contains('is-open') &&
-      !menu.contains(e.target) &&
-      !burger.contains(e.target)
-    ) {
-      toggleMenu();
-    }
-  });
-}
-
-document.addEventListener('DOMContentLoaded', initMobileMenu);
 
 /* ---------------------------------------------------------
    7.  ACCESSIBILITY & REDUCED MOTION
@@ -657,7 +601,7 @@ const preload = (href, as = 'image') => {
 
 /* Preload first video poster & fonts */
 document.addEventListener('DOMContentLoaded', () => {
- z
+  preload(`${CONFIG.rootPath}assets/video/projects/project1-poster.webp`);
   preload('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap', 'style');
 });
 
