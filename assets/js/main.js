@@ -601,7 +601,8 @@ const preload = (href, as = 'image') => {
 
 /* Preload first video poster & fonts */
 document.addEventListener('DOMContentLoaded', () => {
-  preload(`${CONFIG.rootPath}assets/video/projects/project1-poster.webp`);
+ // Optional — or remove this line entirely:
+
   preload('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap', 'style');
 });
 
