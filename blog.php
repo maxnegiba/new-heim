@@ -4,7 +4,7 @@ $stmt = $pdo->query("SELECT id, title, slug, created_at
                      FROM blog_posts
                      ORDER BY created_at DESC");
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-include 'header.php';
+include '/includes/header.php';
 ?>
 
 <section class="blog-list">
@@ -18,4 +18,4 @@ include 'header.php';
   <?php endforeach; ?>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include '/includes/header.php'; ?>
