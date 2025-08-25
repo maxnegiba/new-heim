@@ -18,7 +18,7 @@ include(__DIR__ . '/includes/header.php');
            loop
            playsinline
            preload="metadata"
-           poster="<?= $assets_path ?>images/hero-video.webp">
+           >
         <source src="<?= $assets_path ?>video/hero-video.webm" type="video/webm">
         <source src="<?= $assets_path ?>video/hero-video.mp4" type="video/mp4">
     </video>
@@ -104,7 +104,7 @@ include(__DIR__ . '/includes/header.php');
       <div class="swiper-slide">
         <div class="video-container">
           <video class="bg-video" autoplay loop playsinline preload="metadata"
-                 poster="<?= $assets_path ?>images/projects/project1-poster.webp">
+                 >
             <source src="<?= $assets_path ?>video/projects/project1.mp4" type="video/mp4">
             <source src="<?= $assets_path ?>video/projects/project1.webm" type="video/webm">
             Ihr Browser unterstützt kein Video-Tag.
@@ -138,7 +138,7 @@ include(__DIR__ . '/includes/header.php');
       <div class="swiper-slide">
         <div class="video-container">
           <video class="bg-video" autoplay loop playsinline preload="metadata"
-                 poster="<?= $assets_path ?>images/projects/project2-poster.webp">
+                 >
             <source src="<?= $assets_path ?>video/projects/project2.mp4" type="video/mp4">
             <source src="<?= $assets_path ?>video/projects/project2.webm" type="video/webm">
             Ihr Browser unterstützt kein Video-Tag.
@@ -172,7 +172,7 @@ include(__DIR__ . '/includes/header.php');
       <div class="swiper-slide">
         <div class="video-container">
           <video class="bg-video" autoplay muted playsinline preload="metadata"
-                 poster="<?= $assets_path ?>images/projects/project3-poster.webp">
+                 >
             <source src="<?= $assets_path ?>video/projects/project3.mp4" type="video/mp4">
             <source src="<?= $assets_path ?>video/projects/project3.webm" type="video/webm">
             Ihr Browser unterstützt kein Video-Tag.
@@ -206,7 +206,7 @@ include(__DIR__ . '/includes/header.php');
       <div class="swiper-slide">
         <div class="video-container">
           <video class="bg-video" autoplay loop playsinline preload="metadata"
-                 poster="<?= $assets_path ?>images/projects/project4-poster.webp">
+                 >
             <source src="<?= $assets_path ?>video/projects/project4.mp4" type="video/mp4">
             <source src="<?= $assets_path ?>video/projects/project4.webm" type="video/webm">
             Ihr Browser unterstützt kein Video-Tag.
