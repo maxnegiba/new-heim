@@ -128,4 +128,7 @@ include '../includes/blog-header.php';
     </div>
 </div>
 
-<?php include(__DIR__ . '/../../../includes/footer.php'); ?>
+<?php 
+// Include footer (assuming it's in the same parent directory as the includes folder)
+include __DIR__ . '/../includes/footer.php'; 
+?>
