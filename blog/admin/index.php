@@ -3,7 +3,7 @@ session_start();
 
 // Configurații admin (în producție, folosește baza de date)
 const ADMIN_USER = 'michael';
-const ADMIN_PASS_HASH = '$2y$12$bkb7vbFQ0FZbTjvMMREOe.Hkl/M0kS5shCjf0Fgb2QoFHoHf7D4n6'; // parola: roof2025
+const ADMIN_PASS_HASH = '$argon2id$v=19$m=65536,t=4,p=1$ZHV1emFRSVQ5RWZDempuSA$2MOufSSevY28Ag3AwvYOvB6461FaNk8zuQwSXMeu45c'; // parola: roof2025
 
 // Logout
 if (isset($_GET['logout'])) {
