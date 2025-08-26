@@ -416,3 +416,54 @@ function safePreloadStyle(href) {
 }
 // Example (kept disabled because bundle.min.css is already loaded synchronously):
 // safePreloadStyle('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+document.addEventListener('DOMContentLoaded', function() {
+  // Select all elements that should be Swiper containers
+  const swiperContainers = document.querySelectorAll('.swiper-container');
+
+  // Default Swiper parameters (can be overridden per instance if needed)
+  const defaultParams = {
+    loop: true,
+    spaceBetween: 16,
+    pagination: {
+      // Use function to find pagination within the specific swiper container
+      el: null, // Will be set dynamically
+      clickable: true,
+    },
+    navigation: {
+      // Use function to find navigation buttons within the specific swiper container
+      nextEl: null, // Will be set dynamically
+      prevEl: null, // Will be set dynamically
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 1.2
+      },
+      1024: {
+        slidesPerView: 1.4
+      },
+    }
+  };
+
+  // Iterate through each container and initialize Swiper
+  swiperContainers.forEach(container => {
+    // Clone default parameters to avoid mutation issues
+    const params = {...defaultParams};
+
+    // Set specific elements for pagination and navigation within this container
+    params.pagination.el = container.querySelector('.swiper-pagination');
+    params.navigation.nextEl = container.querySelector('.swiper-button-next');
+    params.navigation.prevEl = container.querySelector('.swiper-button-prev');
+
+    // Check if required elements exist before initializing
+    if (params.pagination.el && params.navigation.nextEl && params.navigation.prevEl) {
+      try {
+        new Swiper(container, params);
+        console.log('Swiper initialized for:', container);
+      } catch (error) {
+        console.error('Error initializing Swiper for container:', container, error);
+      }
+    } else {
+      console.warn('Swiper navigation/pagination elements not found in:', container);
+    }
+  });
+});
