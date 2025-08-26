@@ -1,175 +1,135 @@
 <?php
-// Disable all error output
-error_reporting(0);
-ini_set('display_errors', 0);
+// blog/admin/upload.php
+// declare(strict_types=1); // optional
 
-// Start output buffering to prevent any accidental output
+// DEV: uncomment to debug
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
+
 ob_start();
-
 session_start();
 
-// Check if logged in
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+// Auth check
+if (empty($_SESSION['admin_logged_in'])) {
+    http_response_code(401);
     ob_clean();
     header('Content-Type: application/json');
-    http_response_code(401);
-    die(json_encode(['error' => 'Unauthorized']));
+    echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+    exit;
 }
 
-// Include database
+// DB include
 require_once __DIR__ . '/../../db.php';
 
-// Clean any output that might have occurred
-ob_clean();
-
-// Set JSON header
 header('Content-Type: application/json');
 
-// Configuration
-$uploadDir = realpath(__DIR__ . '/../../uploads/blog');
-if (!$uploadDir) {
-    die(json_encode(['error' => 'Upload directory not found']));
+// Base paths
+$basePath = realpath(__DIR__ . '/../../');
+if ($basePath === false) {
+    $basePath = __DIR__ . '/../../'; // fallback
 }
-$uploadDir .= '/';
-$uploadUrl = '/uploads/blog/';
+$uploadDir = rtrim($basePath, DIRECTORY_SEPARATOR) . '/uploads/blog';
+$uploadUrl = '/uploads/blog';
 
-// Create directories if needed
-if (!is_dir($uploadDir)) {
-    @mkdir($uploadDir, 0755, true);
-}
-
-foreach (['images', 'videos', 'thumbnails'] as $subdir) {
-    $path = $uploadDir . $subdir;
-    if (!is_dir($path)) {
-        @mkdir($path, 0755, true);
+// Ensure directories
+foreach (['', '/images', '/videos', '/thumbnails'] as $sub) {
+    $dir = $uploadDir . $sub;
+    if (!is_dir($dir) && !mkdir($dir, 0755, true)) {
+        ob_clean();
+        echo json_encode(['success' => false, 'error' => 'Cannot create directory: ' . $dir]);
+        exit;
     }
 }
 
-// Get action
 $action = $_POST['action'] ?? $_GET['action'] ?? 'upload';
 
 try {
-    switch ($action) {
-        case 'upload':
-            handleFileUpload();
-            break;
-        case 'list':
-            listMedia();
-            break;
-        default:
-            throw new Exception('Invalid action');
+    if ($action === 'upload') {
+        handleFileUpload($uploadDir, $uploadUrl);
+    } elseif ($action === 'list') {
+        listMedia($uploadDir, $uploadUrl);
+    } else {
+        throw new Exception('Invalid action');
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     ob_clean();
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
+exit;
 
-function handleFileUpload() {
-    global $uploadDir, $uploadUrl;
-    
-    // Check file
+function handleFileUpload(string $uploadDir, string $uploadUrl): void {
     if (!isset($_FILES['file'])) {
         throw new Exception('No file uploaded');
     }
-    
     $file = $_FILES['file'];
-    
-    // Check upload error
+
     if ($file['error'] !== UPLOAD_ERR_OK) {
-        $errors = [
-            1 => 'File too large (server limit)',
-            2 => 'File too large (form limit)',
-            3 => 'Partial upload',
-            4 => 'No file',
-            6 => 'No temp folder',
-            7 => 'Write failed',
-            8 => 'Extension error'
-        ];
-        throw new Exception($errors[$file['error']] ?? 'Upload error ' . $file['error']);
+        throw new Exception(uploadErrorMessage($file['error']));
     }
-    
-    // Check size (10MB)
-    if ($file['size'] > 10485760) {
-        throw new Exception('File too large. Max 10MB');
+
+    // Match your .htaccess (20MB)
+    $max = 20 * 1024 * 1024;
+    if ($file['size'] > $max) {
+        throw new Exception('File too large. Max 20MB');
     }
-    
-    // Check extension
+
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'ogg'];
-    
-    if (!in_array($ext, $allowed)) {
+    $allowed = ['jpg','jpeg','png','gif','webp','mp4','webm','ogg'];
+    if (!in_array($ext, $allowed, true)) {
         throw new Exception('File type not allowed');
     }
-    
-    // Determine type and directory
-    $imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    if (in_array($ext, $imageExts)) {
-        $subdir = 'images/';
-        $type = 'image';
-    } else {
-        $subdir = 'videos/';
-        $type = 'video';
+
+    $isImage = in_array($ext, ['jpg','jpeg','png','gif','webp'], true);
+    $subdir = $isImage ? 'images' : 'videos';
+
+    $newName = date('Ymd_His') . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
+    $targetPath = $uploadDir . '/' . $subdir . '/' . $newName;
+    $publicUrl  = $uploadUrl  . '/' . $subdir . '/' . $newName;
+
+    if (!is_writable($uploadDir . '/' . $subdir)) {
+        throw new Exception('Upload directory is not writable: ' . $uploadDir . '/' . $subdir);
     }
-    
-    // Generate filename
-    $newName = date('Ymd_His') . '_' . uniqid() . '.' . $ext;
-    $targetPath = $uploadDir . $subdir . $newName;
-    $publicUrl = $uploadUrl . $subdir . $newName;
-    
-    // Move file
+
     if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
-        throw new Exception('Failed to save file');
+        throw new Exception('Failed to save file (permissions?)');
     }
-    
-    // Success response
+
     ob_clean();
     echo json_encode([
         'success' => true,
         'url' => $publicUrl,
-        'type' => $type,
+        'type' => $isImage ? 'image' : 'video',
         'name' => $file['name']
     ]);
-    exit;
 }
 
-function listMedia() {
-    global $uploadDir, $uploadUrl;
-    
+function listMedia(string $uploadDir, string $uploadUrl): void {
     $media = [];
-    
-    // Scan images
-    $imgDir = $uploadDir . 'images/';
-    if (is_dir($imgDir)) {
-        $files = scandir($imgDir);
+    foreach (['images' => 'image', 'videos' => 'video'] as $folder => $type) {
+        $dir = $uploadDir . '/' . $folder;
+        if (!is_dir($dir)) continue;
+        $files = scandir($dir) ?: [];
         foreach ($files as $file) {
             if ($file[0] === '.') continue;
             $media[] = [
-                'url' => $uploadUrl . 'images/' . $file,
-                'type' => 'image',
+                'url' => $uploadUrl . '/' . $folder . '/' . $file,
+                'type' => $type,
                 'name' => $file
             ];
         }
     }
-    
-    // Scan videos
-    $vidDir = $uploadDir . 'videos/';
-    if (is_dir($vidDir)) {
-        $files = scandir($vidDir);
-        foreach ($files as $file) {
-            if ($file[0] === '.') continue;
-            $media[] = [
-                'url' => $uploadUrl . 'videos/' . $file,
-                'type' => 'video',
-                'name' => $file
-            ];
-        }
-    }
-    
     ob_clean();
-    echo json_encode([
-        'success' => true,
-        'media' => $media
-    ]);
-    exit;
+    echo json_encode(['success' => true, 'media' => $media]);
 }
-?>
+
+function uploadErrorMessage(int $code): string {
+    return [
+        UPLOAD_ERR_INI_SIZE   => 'File too large (server limit)',
+        UPLOAD_ERR_FORM_SIZE  => 'File too large (form limit)',
+        UPLOAD_ERR_PARTIAL    => 'Partial upload',
+        UPLOAD_ERR_NO_FILE    => 'No file',
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing temp folder',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file',
+        UPLOAD_ERR_EXTENSION  => 'Upload blocked by extension'
+    ][$code] ?? ('Upload error ' . $code);
+}

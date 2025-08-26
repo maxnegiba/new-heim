@@ -1,4 +1,5 @@
 <?php
+// blog/admin/dashboard.php
 session_start();
 require_once __DIR__ . '/../../db.php';
 

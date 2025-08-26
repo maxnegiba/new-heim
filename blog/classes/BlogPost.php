@@ -1,4 +1,5 @@
 <?php
+// blog/classes/BlogPost.php
 namespace Blog;
 
 class BlogPost extends BlogCore {

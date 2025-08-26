@@ -1,4 +1,5 @@
 <?php
+// blog/classes/BlogAuth.php
 namespace Blog;
 
 class BlogAuth extends BlogCore {

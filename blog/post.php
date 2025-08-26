@@ -1,4 +1,5 @@
 <?php
+// blog/post.php
 require_once __DIR__ . '/../db.php';
 
 $slug = $_GET['slug'] ?? '';
