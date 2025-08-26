@@ -13,7 +13,8 @@ try {
     error_log("Blog error: " . $e->getMessage());
 }
 
-include 'includes/blog-header.php';
+// Include header (assuming it's in the same directory as this file)
+include __DIR__ . '/../includes/header.php'; 
 ?>
 
 <style>
@@ -212,4 +213,7 @@ include 'includes/blog-header.php';
     <?php endif; ?>
 </div>
 
-<?php include(__DIR__ . '/includes/footer.php'); ?>
+<?php 
+// Include footer (assuming it's in the same parent directory as the includes folder)
+include __DIR__ . '/../includes/footer.php'; 
+?>
