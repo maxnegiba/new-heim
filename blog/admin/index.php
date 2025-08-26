@@ -1,9 +1,6 @@
 <?php
 session_start();
-
-// Configurații admin (în producție, folosește baza de date)
-const ADMIN_USER = 'michael';
-const ADMIN_PASS_HASH = '$argon2id$v=19$m=65536,t=4,p=1$ZHV1emFRSVQ5RWZDempuSA$2MOufSSevY28Ag3AwvYOvB6461FaNk8zuQwSXMeu45c'; // parola: roof2025
+require_once __DIR__ . '/../../db.php';
 
 // Logout
 if (isset($_GET['logout'])) {
@@ -12,23 +9,34 @@ if (isset($_GET['logout'])) {
     exit;
 }
 
-// Procesare login
+// Process login
 if (!isset($_SESSION['admin']) && isset($_POST['login'])) {
     $username = trim($_POST['u'] ?? '');
     $password = $_POST['p'] ?? '';
     
-    if ($username === ADMIN_USER && password_verify($password, ADMIN_PASS_HASH)) {
-        $_SESSION['admin'] = true;
-        header("Location: /blog/admin/dashboard.php");
-        exit;
-    } else {
-        $error = 'Ungültige Anmeldedaten';
+    try {
+        // Check database for user
+        $stmt = $pdo->prepare("SELECT * FROM blog_admins WHERE username = ? OR email = ?");
+        $stmt->execute([$username, $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($user && password_verify($password, $user['password_hash'])) {
+            $_SESSION['admin'] = true;
+            $_SESSION['admin_id'] = $user['id'];
+            $_SESSION['admin_username'] = $user['username'];
+            header("Location: /blog/admin/dashboard.php");
+            exit;
+        } else {
+            $error = 'Invalid credentials';
+        }
+    } catch (PDOException $e) {
+        $error = 'Database error: ' . $e->getMessage();
     }
 }
 
-// Verificare autentificare pentru dashboard
-if (isset($_GET['page']) && $_GET['page'] === 'dashboard' && !isset($_SESSION['admin'])) {
-    header("Location: /blog/admin");
+// Check if already logged in
+if (isset($_SESSION['admin'])) {
+    header("Location: /blog/admin/dashboard.php");
     exit;
 }
 
@@ -36,79 +44,7 @@ $page_title = 'Admin Login | Blog';
 include '../includes/blog-header.php';
 ?>
 
-<style>
-.admin-login-container {
-    max-width: 400px;
-    margin: 120px auto 60px;
-    padding: 0 20px;
-}
-
-.admin-login-form {
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.admin-login-form h2 {
-    color: #2c3e50;
-    margin-bottom: 30px;
-}
-
-.admin-input {
-    width: 100%;
-    padding: 15px;
-    margin: 15px 0;
-    border: 2px solid #eee;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-.admin-input:focus {
-    border-color: #d32f2f;
-    outline: none;
-}
-
-.admin-btn {
-    width: 100%;
-    padding: 15px;
-    background: #d32f2f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 10px;
-}
-
-.admin-btn:hover {
-    background: #b71c1c;
-}
-
-.error-message {
-    background: #ffebee;
-    color: #c62828;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    border-left: 4px solid #c62828;
-}
-
-@media (max-width: 768px) {
-    .admin-login-container {
-        margin: 100px auto 40px;
-    }
-    
-    .admin-login-form {
-        padding: 30px 20px;
-    }
-}
-</style>
+<!-- Your existing HTML/CSS here -->
 
 <div class="admin-login-container">
     <div class="admin-login-form">
@@ -121,14 +57,11 @@ include '../includes/blog-header.php';
         <?php endif; ?>
         
         <form method="post">
-            <input type="text" name="u" placeholder="Benutzername" class="admin-input" required>
-            <input type="password" name="p" placeholder="Passwort" class="admin-input" required>
-            <button type="submit" name="login" class="admin-btn">Anmelden</button>
+            <input type="text" name="u" placeholder="Username" class="admin-input" required>
+            <input type="password" name="p" placeholder="Password" class="admin-input" required>
+            <button type="submit" name="login" class="admin-btn">Login</button>
         </form>
     </div>
 </div>
 
-<?php 
-// Include footer (assuming it's in the same parent directory as the includes folder)
-include __DIR__ . '/../includes/footer.php'; 
-?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
