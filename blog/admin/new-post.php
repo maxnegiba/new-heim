@@ -17,9 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $body = trim($_POST['body'] ?? '');
     $excerpt = trim($_POST['excerpt'] ?? '');
     $status = $_POST['status'] ?? 'draft';
-    $category_id = $_POST['category_id'] ?? null;
-    $meta_title = trim($_POST['meta_title'] ?? $title);
-    $meta_description = trim($_POST['meta_description'] ?? $excerpt);
+    
+    // Handle category_id - convert empty string to NULL
+    $category_id = !empty($_POST['category_id']) ? intval($_POST['category_id']) : null;
+    
+    $meta_title = trim($_POST['meta_title'] ?? '');
+    $meta_description = trim($_POST['meta_description'] ?? '');
     $meta_keywords = trim($_POST['meta_keywords'] ?? '');
     
     if (empty($title) || empty($body)) {
@@ -42,29 +45,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Auto-generate excerpt if empty
         if (empty($excerpt)) {
-            $excerpt = substr(strip_tags($body), 0, 200) . '...';
+            $excerpt = substr(strip_tags($body), 0, 200);
+            if (strlen(strip_tags($body)) > 200) {
+                $excerpt .= '...';
+            }
+        }
+        
+        // Use post title for meta_title if empty
+        if (empty($meta_title)) {
+            $meta_title = $title;
+        }
+        
+        // Use excerpt for meta_description if empty
+        if (empty($meta_description)) {
+            $meta_description = $excerpt;
         }
         
         try {
-            $stmt = $pdo->prepare("
-                INSERT INTO blog_posts 
-                (title, slug, body, excerpt, status, category_id, reading_time, 
-                 meta_title, meta_description, meta_keywords, author)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
+            // Check which columns exist in your table
+            $tableColumns = $pdo->query("SHOW COLUMNS FROM blog_posts")->fetchAll(PDO::FETCH_COLUMN);
             
-            $stmt->execute([
-                $title, $slug, $body, $excerpt, $status, $category_id, 
-                $reading_time, $meta_title, $meta_description, $meta_keywords,
-                $_SESSION['admin_username']
-            ]);
+            // Build dynamic INSERT query based on existing columns
+            $columns = ['title', 'slug', 'body'];
+            $values = [$title, $slug, $body];
+            $placeholders = ['?', '?', '?'];
             
+            // Add optional columns if they exist
+            if (in_array('excerpt', $tableColumns)) {
+                $columns[] = 'excerpt';
+                $values[] = $excerpt;
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('status', $tableColumns)) {
+                $columns[] = 'status';
+                $values[] = $status;
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('category_id', $tableColumns)) {
+                $columns[] = 'category_id';
+                $values[] = $category_id; // This will be NULL if empty
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('reading_time', $tableColumns)) {
+                $columns[] = 'reading_time';
+                $values[] = $reading_time;
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('meta_title', $tableColumns)) {
+                $columns[] = 'meta_title';
+                $values[] = $meta_title;
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('meta_description', $tableColumns)) {
+                $columns[] = 'meta_description';
+                $values[] = $meta_description;
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('meta_keywords', $tableColumns)) {
+                $columns[] = 'meta_keywords';
+                $values[] = !empty($meta_keywords) ? $meta_keywords : null;
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('author', $tableColumns)) {
+                $columns[] = 'author';
+                $values[] = $_SESSION['admin_username'];
+                $placeholders[] = '?';
+            }
+            
+            if (in_array('views', $tableColumns)) {
+                $columns[] = 'views';
+                $values[] = 0;
+                $placeholders[] = '?';
+            }
+            
+            // Build and execute the query
+            $sql = "INSERT INTO blog_posts (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ")";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($values);
+            
+            $post_id = $pdo->lastInsertId();
             $message = 'Post created successfully!';
             
-            // Redirect to edit page
-            $post_id = $pdo->lastInsertId();
-            header("Location: /blog/admin/edit-post.php?id=$post_id&success=1");
-            exit;
+            // Clear form
+            $_POST = [];
+            
+            // Optional: Redirect to posts list
+            // header("Location: /blog/admin/posts.php?success=1");
+            // exit;
             
         } catch (PDOException $e) {
             $error = 'Error creating post: ' . $e->getMessage();
@@ -72,12 +146,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get categories
+// Get categories (if table exists)
+$categories = [];
 try {
-    $stmt = $pdo->query("SELECT id, name FROM blog_categories ORDER BY name");
-    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $tableExists = $pdo->query("SHOW TABLES LIKE 'blog_categories'")->rowCount() > 0;
+    if ($tableExists) {
+        $stmt = $pdo->query("SELECT id, name FROM blog_categories ORDER BY name");
+        $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 } catch (PDOException $e) {
-    $categories = [];
+    // Categories table doesn't exist, that's OK
 }
 ?>
 <!DOCTYPE html>
@@ -108,7 +186,7 @@ try {
         }
         
         .header-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
@@ -231,9 +309,12 @@ try {
         }
         
         .alert {
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .alert-success {
@@ -270,6 +351,7 @@ try {
             padding: 10px;
             background: #f8f9fa;
             border-radius: 8px;
+            flex-wrap: wrap;
         }
         
         .toolbar button {
@@ -285,6 +367,12 @@ try {
             background: #667eea;
             color: white;
             border-color: #667eea;
+        }
+        
+        .help-text {
+            font-size: 13px;
+            color: #999;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -308,13 +396,16 @@ try {
     <div class="container">
         <?php if ($error): ?>
             <div class="alert alert-error">
-                <i class="fas fa-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
+                <i class="fas fa-exclamation-triangle"></i>
+                <span><?php echo htmlspecialchars($error); ?></span>
             </div>
         <?php endif; ?>
         
         <?php if ($message): ?>
             <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($message); ?>
+                <i class="fas fa-check-circle"></i>
+                <span><?php echo htmlspecialchars($message); ?> 
+                <a href="/blog/admin/posts.php" style="color: inherit; margin-left: 10px;">View all posts →</a></span>
             </div>
         <?php endif; ?>
         
@@ -335,20 +426,29 @@ try {
                     <div class="form-group">
                         <label for="body">Content *</label>
                         <div class="toolbar">
-                            <button type="button" onclick="insertTag('**', '**')">
+                            <button type="button" onclick="insertTag('**', '**')" title="Bold">
                                 <i class="fas fa-bold"></i>
                             </button>
-                            <button type="button" onclick="insertTag('*', '*')">
+                            <button type="button" onclick="insertTag('*', '*')" title="Italic">
                                 <i class="fas fa-italic"></i>
                             </button>
-                            <button type="button" onclick="insertTag('\n## ', '\n')">
-                                <i class="fas fa-heading"></i>
+                            <button type="button" onclick="insertTag('\n## ', '\n')" title="Heading 2">
+                                <i class="fas fa-heading"></i> H2
                             </button>
-                            <button type="button" onclick="insertTag('\n- ', '')">
+                            <button type="button" onclick="insertTag('\n### ', '\n')" title="Heading 3">
+                                <i class="fas fa-heading"></i> H3
+                            </button>
+                            <button type="button" onclick="insertTag('\n- ', '')" title="List">
                                 <i class="fas fa-list"></i>
                             </button>
-                            <button type="button" onclick="insertTag('[', '](url)')">
+                            <button type="button" onclick="insertTag('[', '](url)')" title="Link">
                                 <i class="fas fa-link"></i>
+                            </button>
+                            <button type="button" onclick="insertTag('\n> ', '\n')" title="Quote">
+                                <i class="fas fa-quote-left"></i>
+                            </button>
+                            <button type="button" onclick="insertTag('`', '`')" title="Code">
+                                <i class="fas fa-code"></i>
                             </button>
                         </div>
                         <textarea id="body" 
@@ -356,7 +456,7 @@ try {
                                   placeholder="Write your post content here..." 
                                   required><?php echo htmlspecialchars($_POST['body'] ?? ''); ?></textarea>
                         <div class="char-count">
-                            <span id="wordCount">0</span> words
+                            <span id="wordCount">0</span> words | <span id="charCount">0</span> characters
                         </div>
                     </div>
                     
@@ -366,6 +466,7 @@ try {
                                   name="excerpt" 
                                   rows="3"
                                   placeholder="Brief description (auto-generated if left empty)..."><?php echo htmlspecialchars($_POST['excerpt'] ?? ''); ?></textarea>
+                        <div class="help-text">A short summary of your post that appears in post listings.</div>
                     </div>
                 </div>
                 
@@ -376,23 +477,26 @@ try {
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select id="status" name="status">
-                            <option value="draft">Draft</option>
-                            <option value="published">Published</option>
-                            <option value="scheduled">Scheduled</option>
+                            <option value="draft" <?php echo ($_POST['status'] ?? '') === 'draft' ? 'selected' : ''; ?>>Draft</option>
+                            <option value="published" <?php echo ($_POST['status'] ?? '') === 'published' ? 'selected' : ''; ?>>Published</option>
+                            <option value="scheduled" <?php echo ($_POST['status'] ?? '') === 'scheduled' ? 'selected' : ''; ?>>Scheduled</option>
                         </select>
                     </div>
                     
+                    <?php if (!empty($categories)): ?>
                     <div class="form-group">
                         <label for="category_id">Category</label>
                         <select id="category_id" name="category_id">
-                            <option value="">— Select Category —</option>
+                            <option value="">— No Category —</option>
                             <?php foreach ($categories as $category): ?>
-                                <option value="<?php echo $category['id']; ?>">
+                                <option value="<?php echo $category['id']; ?>" 
+                                        <?php echo ($_POST['category_id'] ?? '') == $category['id'] ? 'selected' : ''; ?>>
                                     <?php echo htmlspecialchars($category['name']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <?php endif; ?>
                     
                     <h3 class="section-title">SEO Settings</h3>
                     
@@ -403,6 +507,7 @@ try {
                                name="meta_title" 
                                placeholder="SEO title (uses post title if empty)"
                                value="<?php echo htmlspecialchars($_POST['meta_title'] ?? ''); ?>">
+                        <div class="help-text">Title that appears in search results (50-60 characters).</div>
                     </div>
                     
                     <div class="form-group">
@@ -411,6 +516,7 @@ try {
                                   name="meta_description" 
                                   rows="3"
                                   placeholder="SEO description..."><?php echo htmlspecialchars($_POST['meta_description'] ?? ''); ?></textarea>
+                        <div class="help-text">Description for search results (150-160 characters).</div>
                     </div>
                     
                     <div class="form-group">
@@ -420,6 +526,7 @@ try {
                                name="meta_keywords" 
                                placeholder="keyword1, keyword2, keyword3"
                                value="<?php echo htmlspecialchars($_POST['meta_keywords'] ?? ''); ?>">
+                        <div class="help-text">Comma-separated keywords for SEO.</div>
                     </div>
                     
                     <div style="margin-top: 30px;">
@@ -436,18 +543,20 @@ try {
     </div>
     
     <script>
-        // Word counter
+        // Word and character counter
         const bodyTextarea = document.getElementById('body');
         const wordCount = document.getElementById('wordCount');
+        const charCount = document.getElementById('charCount');
         
-        function updateWordCount() {
+        function updateCounts() {
             const text = bodyTextarea.value;
             const words = text.trim().split(/\s+/).filter(word => word.length > 0);
             wordCount.textContent = words.length;
+            charCount.textContent = text.length;
         }
         
-        bodyTextarea.addEventListener('input', updateWordCount);
-        updateWordCount();
+        bodyTextarea.addEventListener('input', updateCounts);
+        updateCounts();
         
         // Insert formatting tags
         function insertTag(openTag, closeTag) {
@@ -464,8 +573,49 @@ try {
             textarea.focus();
             textarea.setSelectionRange(newCursorPos, newCursorPos);
             
-            updateWordCount();
+            updateCounts();
         }
+        
+        // Auto-save draft to localStorage
+        let autoSaveTimer;
+        function autoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(function() {
+                localStorage.setItem('draft_title', document.getElementById('title').value);
+                localStorage.setItem('draft_body', bodyTextarea.value);
+                localStorage.setItem('draft_excerpt', document.getElementById('excerpt').value);
+                console.log('Draft saved locally at ' + new Date().toLocaleTimeString());
+            }, 2000);
+        }
+        
+        document.getElementById('title').addEventListener('input', autoSave);
+        bodyTextarea.addEventListener('input', autoSave);
+        document.getElementById('excerpt').addEventListener('input', autoSave);
+        
+        // Restore draft on load
+        window.addEventListener('load', function() {
+            <?php if (empty($_POST) && empty($message)): ?>
+            const draftTitle = localStorage.getItem('draft_title');
+            const draftBody = localStorage.getItem('draft_body');
+            const draftExcerpt = localStorage.getItem('draft_excerpt');
+            
+            if (draftTitle || draftBody) {
+                if (confirm('Restore previous draft?')) {
+                    if (draftTitle) document.getElementById('title').value = draftTitle;
+                    if (draftBody) bodyTextarea.value = draftBody;
+                    if (draftExcerpt) document.getElementById('excerpt').value = draftExcerpt;
+                    updateCounts();
+                }
+            }
+            <?php endif; ?>
+        });
+        
+        // Clear draft on successful save
+        <?php if ($message): ?>
+        localStorage.removeItem('draft_title');
+        localStorage.removeItem('draft_body');
+        localStorage.removeItem('draft_excerpt');
+        <?php endif; ?>
     </script>
 </body>
 </html>
