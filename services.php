@@ -45,7 +45,7 @@ include(__DIR__ . '/includes/floating-buttons.php');
 <?php include(__DIR__ . '/services_content/klempner_section.php'); ?>
 
 <!-- ===== ZIMMERMANN ===== -->
-<?php include(__DIR__ . '/services_content/zimmerer_section.php'); ?> <!-- Corectat numele fișierului -->
+<?php include(__DIR__ . '/services_content/zimmermann_section.php'); ?> <!-- Corectat numele fișierului -->
 
 <!-- ===== VELUX ===== -->
 <?php include(__DIR__ . '/services_content/velux_section.php'); ?>

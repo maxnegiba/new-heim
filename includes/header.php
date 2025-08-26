@@ -284,6 +284,7 @@ $required_css_files = getRequiredCSSFiles($current_page, $assets_path, $is_home)
                     <li><a href="<?= $base_url ?>about.php" class="<?= $current_page === 'about.php' ? 'active' : '' ?>">Über uns</a></li>
                     <li><a href="<?= $base_url ?>services.php" class="<?= $current_page === 'services.php' ? 'active' : '' ?>">Dienstleistungen</a></li>
                     <li><a href="<?= $base_url ?>projects.php" class="<?= $current_page === 'projects.php' ? 'active' : '' ?>">Unsere Projekte</a></li>
+                    <li><a href="/blog" class="<?= strpos($request_uri, '/blog') === 0 ? 'active' : '' ?>">Blog</a></li>
                     <li><a href="<?= $base_url ?>contact.php" class="<?= $current_page === 'contact.php' ? 'active' : '' ?>">Kontakt</a></li>
                 </ul>
             </nav>
