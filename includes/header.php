@@ -14,6 +14,10 @@ if (!isset($page_title)) {
 if (!isset($page_description)) {
     $page_description = 'Professionelle Dacharbeiten, Fassadenarbeiten und Zaunbau in Berlin und Umgebung. Kostenlose Beratung und individuelles Angebot.';
 }
+
+// Buffer the rendered page so legacy company/phone references in older content
+// are consistently replaced by the current MB Bau branding.
+ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="de">
