@@ -1,68 +1,90 @@
 <?php
-/* /var/www/site-acoperisuri/mail.php */
-header('Content-Type: application/json');
+declare(strict_types=1);
 
-// 1. Datele primite
-$name    = trim($_POST['name']    ?? '');
-$phone   = trim($_POST['phone']   ?? '');
-$email   = trim($_POST['email']   ?? '');
-$addr    = trim($_POST['address'] ?? '');
-$service = $_POST['service']      ?? '';
-$date    = $_POST['date']         ?? '';
-$msg     = trim($_POST['message'] ?? '');
-$website = $_POST['website']      ?? '';
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
 
-// 2. Honeypot
-if ($website !== '') {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Spam detected']);
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'error' => 'Methode nicht erlaubt.']);
     exit;
 }
 
-// 3. reCAPTCHA v3
-$recaptcha = $_POST['recaptcha_response'] ?? '';
-$secret    = '6Lfd6IwrAAAAAIEybbgYHpw9xrqIo1AY9CPybfwq'; // ← cheia SECRETĂ
-$verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+function field(string $name, int $max = 500): string
+{
+    $value = trim((string) ($_POST[$name] ?? ''));
+    $value = str_replace(["\r", "\0"], '', $value);
+    return mb_substr($value, 0, $max);
+}
 
-$ch = curl_init();
-curl_setopt_array($ch, [
-    CURLOPT_URL            => $verifyUrl,
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => http_build_query(['secret' => $secret, 'response' => $recaptcha]),
-    CURLOPT_RETURNTRANSFER => true,
-]);
-$response = json_decode(curl_exec($ch) ?: '');
-curl_close($ch);
+$name = field('name', 120);
+$phone = field('phone', 40);
+$email = field('email', 160);
+$address = field('address', 220);
+$service = field('service', 120);
+$date = field('date', 20);
+$message = field('message', 3000);
+$website = field('website', 200);
+$consent = (string) ($_POST['consent'] ?? $_POST['gdpr'] ?? '');
+$startedAt = (int) ($_POST['started_at'] ?? 0);
 
-if (!$response || !$response->success || ($response->score ?? 0) < 0.5) {
+if ($website !== '' || ($startedAt > 0 && time() - $startedAt < 2)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Captcha failed']);
+    echo json_encode(['success' => false, 'error' => 'Anfrage konnte nicht verarbeitet werden.']);
     exit;
 }
 
-// 4. Validare
-if ($name === '' || $addr === '' || $service === '') {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Pflichtfelder fehlen']);
+$consentGiven = in_array(strtolower($consent), ['1', 'on', 'yes', 'true'], true);
+if ($name === '' || $address === '' || $service === '' || !$consentGiven) {
+    http_response_code(422);
+    echo json_encode(['success' => false, 'error' => 'Bitte füllen Sie alle Pflichtfelder aus.']);
     exit;
 }
+
 if ($phone === '' && $email === '') {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Telefon oder E-Mail angeben']);
+    http_response_code(422);
+    echo json_encode(['success' => false, 'error' => 'Bitte geben Sie Telefon oder E-Mail an.']);
     exit;
 }
 
-// 5. Compunerea e-mailului
-$subject = "Neue Kontaktanfrage";
-$body    = "Name: $name\nAdresse: $addr\nTelefon: $phone\nE-Mail: $email\nDienstleistung: $service\nWunschtermin: $date\n\nNachricht:\n$msg";
+if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(422);
+    echo json_encode(['success' => false, 'error' => 'Bitte geben Sie eine gültige E-Mail-Adresse an.']);
+    exit;
+}
 
-$headers =
-    "From: Info.michael@gmbh.de\r\n" .
-    "Reply-To: $email\r\n" .
-    "Content-Type: text/plain; charset=utf-8\r\n";
+$recipient = getenv('CONTACT_TO_EMAIL') ?: 'info.michaell.gmbh@gmail.com';
+$subject = 'Neue Anfrage über dachdeckerberlin24.de';
+$body = implode("\n", [
+    'Neue Anfrage über dachdeckerberlin24.de',
+    '----------------------------------------',
+    "Name: {$name}",
+    "Telefon: {$phone}",
+    "E-Mail: {$email}",
+    "Objekt: {$address}",
+    "Leistung: {$service}",
+    "Wunschtermin: {$date}",
+    '',
+    'Nachricht:',
+    $message,
+]);
 
-// 6. Trimitere
-$sent = mail('info.michaell.gmbh@gmail.com', $subject, $body, $headers);
+$headers = [
+    'From: MB Bau Website <website@dachdeckerberlin24.de>',
+    'Content-Type: text/plain; charset=UTF-8',
+    'MIME-Version: 1.0',
+];
+if ($email !== '') {
+    $headers[] = 'Reply-To: ' . $email;
+}
 
-echo json_encode(['success' => (bool)$sent]);
-?>
+$sent = @mail($recipient, $subject, $body, implode("\r\n", $headers));
+
+if (!$sent) {
+    error_log('MB Bau contact form: mail() returned false');
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Die Anfrage konnte gerade nicht per E-Mail gesendet werden. Bitte rufen Sie uns an oder nutzen Sie WhatsApp.']);
+    exit;
+}
+
+echo json_encode(['success' => true]);
