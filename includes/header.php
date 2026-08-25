@@ -6,7 +6,18 @@ $base_url = $protocol . $host . '/';
 $assets_path = $base_url . 'assets/';
 $current_page = basename($_SERVER['PHP_SELF'] ?? 'index.php');
 $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
-$is_home = ($current_page === 'index.php' || $request_uri === '/');
+$request_path = parse_url($request_uri, PHP_URL_PATH) ?: '/';
+$is_blog = strpos($request_path, '/blog') === 0;
+$is_home = !$is_blog && ($current_page === 'index.php' || $request_path === '/');
+
+if ($is_blog) {
+    $page_slug = 'blog';
+} elseif ($is_home) {
+    $page_slug = 'home';
+} else {
+    $page_slug = preg_replace('/[^a-z0-9-]+/i', '-', pathinfo($current_page, PATHINFO_FILENAME));
+    $page_slug = strtolower(trim((string) $page_slug, '-')) ?: 'page';
+}
 
 if (!isset($page_title)) {
     $page_title = 'MB Bau Dienstleistungen | Dachdecker Berlin';
@@ -40,6 +51,7 @@ ob_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?= $assets_path ?>css/controlled-redesign.css?v=20260825-1">
 
     <style>
         html { overflow-y: scroll; }
@@ -54,7 +66,7 @@ ob_start();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer crossorigin></script>
     <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.5/dist/js/lightbox.min.js" defer crossorigin></script>
 </head>
-<body>
+<body class="page-<?= htmlspecialchars($page_slug, ENT_QUOTES, 'UTF-8') ?>">
 <header class="header">
     <div class="container">
         <a href="<?= $base_url ?>" class="logo" aria-label="MB Bau Dienstleistungen Startseite">
@@ -71,7 +83,7 @@ ob_start();
                 <li><a href="<?= $base_url ?>about.php" class="<?= $current_page === 'about.php' ? 'active' : '' ?>">Über uns</a></li>
                 <li><a href="<?= $base_url ?>services.php" class="<?= $current_page === 'services.php' ? 'active' : '' ?>">Dienstleistungen</a></li>
                 <li><a href="<?= $base_url ?>projects.php" class="<?= $current_page === 'projects.php' ? 'active' : '' ?>">Unsere Projekte</a></li>
-                <li><a href="<?= $base_url ?>blog/" class="<?= strpos($request_uri, '/blog') === 0 ? 'active' : '' ?>">Blog</a></li>
+                <li><a href="<?= $base_url ?>blog/" class="<?= $is_blog ? 'active' : '' ?>">Blog</a></li>
                 <li><a href="<?= $base_url ?>contact.php" class="<?= $current_page === 'contact.php' ? 'active' : '' ?> cta-button">Kontakt</a></li>
             </ul>
         </nav>
@@ -86,7 +98,7 @@ ob_start();
                 <li><a href="<?= $base_url ?>about.php" class="<?= $current_page === 'about.php' ? 'active' : '' ?>">Über uns</a></li>
                 <li><a href="<?= $base_url ?>services.php" class="<?= $current_page === 'services.php' ? 'active' : '' ?>">Dienstleistungen</a></li>
                 <li><a href="<?= $base_url ?>projects.php" class="<?= $current_page === 'projects.php' ? 'active' : '' ?>">Unsere Projekte</a></li>
-                <li><a href="<?= $base_url ?>blog/" class="<?= strpos($request_uri, '/blog') === 0 ? 'active' : '' ?>">Blog</a></li>
+                <li><a href="<?= $base_url ?>blog/" class="<?= $is_blog ? 'active' : '' ?>">Blog</a></li>
                 <li><a href="<?= $base_url ?>contact.php" class="<?= $current_page === 'contact.php' ? 'active' : '' ?>">Kontakt</a></li>
             </ul>
         </nav>
