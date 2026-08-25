@@ -1,0 +1,541 @@
+/*
+ * Controlled secondary-page redesign.
+ * Home and contact are intentionally excluded: they are the visual references.
+ * This file changes presentation only; page copy and media remain untouched.
+ */
+
+body:not(.page-home):not(.page-contact) {
+  --mb-red: #d32f2f;
+  --mb-red-dark: #b71c1c;
+  --mb-ink: #202b38;
+  --mb-text: #4f5965;
+  --mb-soft: #f7f8fa;
+  --mb-soft-2: #eef1f4;
+  --mb-white: #ffffff;
+  --mb-border: rgba(32, 43, 56, 0.11);
+  --mb-shadow: 0 12px 34px rgba(20, 29, 38, 0.09);
+  --mb-shadow-strong: 0 18px 45px rgba(20, 29, 38, 0.16);
+  --mb-radius: 16px;
+  --mb-radius-lg: 22px;
+  background: var(--mb-white);
+  color: var(--mb-ink);
+}
+
+body:not(.page-home):not(.page-contact) main {
+  background: var(--mb-white);
+}
+
+body:not(.page-home):not(.page-contact) main a {
+  text-underline-offset: 3px;
+}
+
+/* Shared secondary-page heroes: same dark/red language as Home + Contact. */
+body:not(.page-home):not(.page-contact) .hero--small,
+body.page-about .about-hero,
+body.page-projects .projects-hero,
+body.page-blog .blog-hero,
+body.page-blog .blog-post-hero {
+  position: relative;
+  min-height: 390px;
+  height: 50vh;
+  max-height: 560px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  background-color: #111820;
+}
+
+body.page-about .about-hero {
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+}
+
+body.page-projects .projects-hero,
+body.page-blog .blog-hero,
+body.page-blog .blog-post-hero {
+  background:
+    radial-gradient(circle at 78% 24%, rgba(211, 47, 47, 0.28), transparent 34%),
+    linear-gradient(135deg, #101720 0%, #1c2631 58%, #111820 100%) !important;
+  text-align: center;
+}
+
+body.page-about .about-hero::before {
+  background: linear-gradient(135deg, rgba(9, 15, 22, 0.82), rgba(9, 15, 22, 0.58)) !important;
+}
+
+body:not(.page-home):not(.page-contact) .hero--small::after,
+body.page-projects .projects-hero::after,
+body.page-blog .blog-hero::after,
+body.page-blog .blog-post-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--mb-red), var(--mb-red-dark));
+  z-index: 4;
+}
+
+body:not(.page-home):not(.page-contact) .hero__overlay {
+  background: linear-gradient(135deg, rgba(9, 15, 22, 0.78), rgba(9, 15, 22, 0.48)) !important;
+}
+
+body:not(.page-home):not(.page-contact) .hero__bg {
+  filter: brightness(0.72) saturate(0.92) !important;
+}
+
+body:not(.page-home):not(.page-contact) .hero__overlay h1,
+body.page-about .about-hero h1,
+body.page-projects .projects-hero h1,
+body.page-blog .blog-hero h1,
+body.page-blog .blog-post-hero h1 {
+  color: #fff !important;
+  font-size: clamp(2.2rem, 5vw, 4rem) !important;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px !important;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.28);
+}
+
+body:not(.page-home):not(.page-contact) .hero__overlay p,
+body.page-about .about-hero p,
+body.page-projects .projects-hero p,
+body.page-blog .blog-hero p {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: clamp(1rem, 2vw, 1.25rem) !important;
+  line-height: 1.7;
+}
+
+/* Headings and section rhythm. */
+body:not(.page-home):not(.page-contact) .service-detail,
+body:not(.page-home):not(.page-contact) .final-cta,
+body.page-projects .projects-grid,
+body.page-about .about-content {
+  padding-top: clamp(54px, 7vw, 90px);
+  padding-bottom: clamp(54px, 7vw, 90px);
+}
+
+body:not(.page-home):not(.page-contact) .service-detail > .container,
+body.page-about .about-content > .container,
+body.page-projects .projects-grid > .container {
+  max-width: 1200px;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail h2,
+body:not(.page-home):not(.page-contact) .service-detail .section-title,
+body.page-about .about-content h2,
+body.page-projects .projects-grid h2,
+body.page-blog .blog-container h2,
+body.page-blog .blog-container h3 {
+  color: var(--mb-ink) !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail h2,
+body.page-about .about-content h2 {
+  position: relative;
+  margin-top: 42px;
+  margin-bottom: 22px;
+  padding-left: 18px;
+  text-align: left !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail h2::before,
+body.page-about .about-content h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  bottom: 0.1em;
+  width: 4px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--mb-red), var(--mb-red-dark));
+}
+
+body:not(.page-home):not(.page-contact) .service-detail h2::after {
+  display: none !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail p,
+body.page-about .about-content p,
+body.page-blog .blog-post-content,
+body.page-blog .blog-post-excerpt {
+  color: var(--mb-text) !important;
+  line-height: 1.8;
+}
+
+/* Main Leistungen page and individual service pages. */
+body.page-services .service-nav,
+body[class^="page-"]:not(.page-home):not(.page-contact):not(.page-about):not(.page-projects):not(.page-blog) .service-nav {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid var(--mb-border) !important;
+  box-shadow: 0 8px 24px rgba(20, 29, 38, 0.07) !important;
+  backdrop-filter: blur(10px);
+}
+
+body.page-services .service-nav a {
+  color: var(--mb-ink) !important;
+  background: var(--mb-soft) !important;
+  border: 1px solid var(--mb-border);
+}
+
+body.page-services .service-nav a:hover,
+body.page-services .service-nav a:focus {
+  color: #fff !important;
+  background: var(--mb-red) !important;
+  border-color: var(--mb-red);
+}
+
+body:not(.page-home):not(.page-contact) .service-detail:nth-of-type(even) {
+  background: linear-gradient(180deg, var(--mb-soft) 0%, #fff 100%) !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail .grid-2 {
+  gap: clamp(30px, 5vw, 64px);
+}
+
+body:not(.page-home):not(.page-contact) .service-detail figure,
+body:not(.page-home):not(.page-contact) .intro-block,
+body:not(.page-home):not(.page-contact) .hochdruck-why {
+  border-radius: var(--mb-radius-lg) !important;
+}
+
+body:not(.page-home):not(.page-contact) .intro-block,
+body:not(.page-home):not(.page-contact) .hochdruck-why {
+  background: var(--mb-soft) !important;
+  border: 1px solid var(--mb-border);
+  box-shadow: var(--mb-shadow);
+  padding: clamp(22px, 4vw, 38px) !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail figure {
+  overflow: hidden;
+  box-shadow: var(--mb-shadow);
+  background: #111820;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail figure img,
+body:not(.page-home):not(.page-contact) .service-detail figure video {
+  width: 100%;
+  display: block;
+}
+
+body:not(.page-home):not(.page-contact) .benefits-grid {
+  gap: 18px !important;
+}
+
+body:not(.page-home):not(.page-contact) .benefit-item {
+  background: #fff !important;
+  border: 1px solid var(--mb-border);
+  border-top: 3px solid var(--mb-red);
+  border-radius: var(--mb-radius) !important;
+  box-shadow: var(--mb-shadow) !important;
+  padding: 24px 18px !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail ul li {
+  color: var(--mb-text) !important;
+  border-bottom-color: var(--mb-border) !important;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail ul li::before {
+  background: var(--mb-red) !important;
+}
+
+/* Keep every existing image/video carousel, only harmonise its visual shell. */
+body:not(.page-home):not(.page-contact) .service-detail .swiper,
+body.page-projects .projectsSwiper {
+  border-radius: var(--mb-radius-lg) !important;
+  background: #111820;
+  box-shadow: var(--mb-shadow-strong);
+  overflow: hidden;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail .swiper-slide {
+  background: #111820;
+}
+
+body:not(.page-home):not(.page-contact) .service-detail .swiper-slide img,
+body:not(.page-home):not(.page-contact) .service-detail .swiper-slide video {
+  width: 100% !important;
+  min-height: 260px;
+  max-height: 520px !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+body:not(.page-home):not(.page-contact) .swiper-button-next,
+body:not(.page-home):not(.page-contact) .swiper-button-prev {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  color: #fff !important;
+  background: rgba(211, 47, 47, 0.92) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22) !important;
+}
+
+body:not(.page-home):not(.page-contact) .swiper-button-next::after,
+body:not(.page-home):not(.page-contact) .swiper-button-prev::after {
+  font-size: 16px !important;
+}
+
+body:not(.page-home):not(.page-contact) .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.75) !important;
+  opacity: 0.8;
+}
+
+body:not(.page-home):not(.page-contact) .swiper-pagination-bullet-active {
+  background: var(--mb-red) !important;
+  opacity: 1;
+}
+
+/* Existing video grids stay grids; only their cards are aligned visually. */
+body:not(.page-home):not(.page-contact) .video-grid {
+  gap: 20px !important;
+}
+
+body:not(.page-home):not(.page-contact) .video-thumb {
+  border-radius: var(--mb-radius) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--mb-shadow) !important;
+  background: #111820 !important;
+}
+
+body:not(.page-home):not(.page-contact) .video-thumb:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--mb-shadow-strong) !important;
+}
+
+body:not(.page-home):not(.page-contact) .play-icon {
+  background: rgba(211, 47, 47, 0.84) !important;
+}
+
+/* Buttons follow the same red treatment as Home and Contact. */
+body:not(.page-home):not(.page-contact) .btn--primary,
+body:not(.page-home):not(.page-contact) .btn-primary {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--mb-red), var(--mb-red-dark)) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 20px rgba(211, 47, 47, 0.22) !important;
+}
+
+body:not(.page-home):not(.page-contact) .btn--primary:hover,
+body:not(.page-home):not(.page-contact) .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(211, 47, 47, 0.34) !important;
+}
+
+body:not(.page-home):not(.page-contact) .final-cta {
+  background:
+    radial-gradient(circle at 82% 25%, rgba(211, 47, 47, 0.34), transparent 30%),
+    linear-gradient(135deg, #111820, #222d39) !important;
+  color: #fff;
+  text-align: center;
+}
+
+body:not(.page-home):not(.page-contact) .final-cta h2,
+body:not(.page-home):not(.page-contact) .final-cta p {
+  color: #fff !important;
+}
+
+/* About page: preserve every word, improve hierarchy only. */
+body.page-about .about-content {
+  max-width: none !important;
+  margin: 0 !important;
+  background: #fff;
+}
+
+body.page-about .about-content > .container {
+  background: #fff;
+}
+
+body.page-about .about-content .services-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 28px 0 38px !important;
+}
+
+body.page-about .about-content .services-list li {
+  margin: 0 !important;
+  padding: 14px 16px;
+  border: 1px solid var(--mb-border);
+  border-radius: 12px;
+  background: var(--mb-soft);
+  color: var(--mb-ink);
+}
+
+body.page-about .cta-section {
+  padding: clamp(28px, 5vw, 46px);
+  border-radius: var(--mb-radius-lg);
+  background: linear-gradient(135deg, var(--mb-soft), #fff);
+  border: 1px solid var(--mb-border);
+  box-shadow: var(--mb-shadow);
+}
+
+/* Projects: the large image grid becomes a real carousel. */
+body.page-projects .projects-grid {
+  background: linear-gradient(180deg, var(--mb-soft), #fff);
+}
+
+body.page-projects .projectsSwiper {
+  padding-bottom: 46px;
+}
+
+body.page-projects .projectsSwiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+body.page-projects .project-card {
+  position: relative;
+  min-height: 360px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0 !important;
+  cursor: zoom-in;
+  background: #111820;
+}
+
+body.page-projects .project-card picture,
+body.page-projects .project-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+body.page-projects .project-card img {
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+body.page-projects .project-card:hover img {
+  transform: scale(1.045);
+}
+
+body.page-projects .project-card .overlay {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 42px 22px 20px;
+  background: linear-gradient(transparent, rgba(9, 15, 22, 0.86));
+  color: #fff;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+body.page-projects .project-card .overlay span {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+body.page-projects .projectsSwiper .swiper-pagination {
+  bottom: 14px !important;
+}
+
+/* Blog: override the old inline palette without changing article copy. */
+body.page-blog .blog-hero,
+body.page-blog .blog-post-hero {
+  margin-top: 0 !important;
+  padding: 0 20px !important;
+}
+
+body.page-blog .blog-container,
+body.page-blog .blog-post-container {
+  max-width: 1200px !important;
+  margin: clamp(44px, 6vw, 76px) auto !important;
+  padding: 0 20px !important;
+}
+
+body.page-blog .blog-grid {
+  gap: 24px !important;
+}
+
+body.page-blog .blog-post-card,
+body.page-blog .blog-post-content {
+  border-radius: var(--mb-radius-lg) !important;
+  border: 1px solid var(--mb-border) !important;
+  box-shadow: var(--mb-shadow) !important;
+  overflow: hidden;
+}
+
+body.page-blog .blog-post-card {
+  border-top: 4px solid var(--mb-red) !important;
+}
+
+body.page-blog .blog-post-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: var(--mb-shadow-strong) !important;
+}
+
+body.page-blog .blog-post-content h3 a,
+body.page-blog .read-more,
+body.page-blog .back-to-blog {
+  color: var(--mb-red) !important;
+}
+
+body.page-blog .blog-post-image {
+  background: linear-gradient(135deg, var(--mb-red), var(--mb-red-dark)) !important;
+}
+
+body.page-blog .featured-image {
+  border-radius: var(--mb-radius) !important;
+}
+
+body.page-blog .blog-post-content blockquote {
+  border-left-color: var(--mb-red) !important;
+  background: var(--mb-soft);
+  padding: 18px 20px !important;
+  border-radius: 0 12px 12px 0;
+}
+
+/* Prevent page-specific dark-mode rules from breaking the light/red site identity. */
+@media (prefers-color-scheme: dark) {
+  body:not(.page-home):not(.page-contact) {
+    background: #fff !important;
+    color: var(--mb-ink) !important;
+  }
+
+  body:not(.page-home):not(.page-contact) main,
+  body:not(.page-home):not(.page-contact) .service-detail,
+  body:not(.page-home):not(.page-contact) .service-detail.alt {
+    color: var(--mb-ink) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  body:not(.page-home):not(.page-contact) .hero--small,
+  body.page-about .about-hero,
+  body.page-projects .projects-hero,
+  body.page-blog .blog-hero,
+  body.page-blog .blog-post-hero {
+    min-height: 330px;
+    height: 44vh;
+  }
+
+  body.page-about .about-content .services-list {
+    grid-template-columns: 1fr;
+  }
+
+  body.page-projects .project-card {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  body:not(.page-home):not(.page-contact) .service-detail,
+  body:not(.page-home):not(.page-contact) .final-cta,
+  body.page-projects .projects-grid,
+  body.page-about .about-content {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  body:not(.page-home):not(.page-contact) .service-detail .swiper-slide img,
+  body:not(.page-home):not(.page-contact) .service-detail .swiper-slide video {
+    min-height: 220px;
+  }
+
+  body.page-projects .project-card {
+    min-height: 260px;
+  }
+}
