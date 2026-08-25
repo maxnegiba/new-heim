@@ -33,3 +33,31 @@
 </div>
 </body>
 </html>
+<?php
+if (ob_get_level() > 0) {
+    $html = ob_get_clean();
+    $legacy = [
+        'Der Hausmeister Michael GmbH',
+        'Dachdeckerei Michael',
+        'MeisterDach GmbH',
+        'MeisterDach',
+        'michael GmbH',
+        '+491626781242',
+        '+49 162 678 12 42',
+        '+49 162 678 1 242',
+        '+49 162 6781242',
+    ];
+    $current = [
+        'MB Bau Dienstleistungen',
+        'MB Bau Dienstleistungen',
+        'MB Bau Dienstleistungen',
+        'MB Bau Dienstleistungen',
+        'MB Bau Dienstleistungen',
+        '+4917614122627',
+        '+49 176 141 22 627',
+        '+49 176 141 22 627',
+        '+49 176 141 22 627',
+    ];
+    echo str_replace($legacy, $current, $html);
+}
+?>
