@@ -1,0 +1,22 @@
+/* Native playback support for existing service video cards. */
+.video-thumb {
+  cursor: default;
+}
+
+.video-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.video-thumb .play-icon {
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.video-thumb.is-playing .play-icon,
+.video-thumb.is-playing:hover .play-icon {
+  opacity: 0 !important;
+}
