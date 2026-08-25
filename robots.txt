@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /blog/admin/
+Disallow: /AI/
+Disallow: /check-permision.php
+Disallow: /generate-hash.php
+
+Sitemap: https://dachdeckerberlin24.de/sitemap.xml
