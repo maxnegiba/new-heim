@@ -1,283 +1,114 @@
 <?php
-// Setări SEO pentru pagina principală
-$page_title = "Dachdecker Berlin Brandenburg | Klempner & Zimmermann | Der Hausmeister Michael GmbH";
-$page_description = "Professionelle Dachdecker, Klempner & Zimmermann in Berlin & Brandenburg. Über 20 Jahre Erfahrung. Kostenlose Beratung & Angebot!";
-
+$page_title = 'MB Bau Dienstleistungen | Dacharbeiten, Fassaden & Zaunbau Berlin';
+$page_description = 'MB Bau Dienstleistungen: Dacharbeiten, Fassadenarbeiten, Zaunbau, Reparaturen und Abdichtungen in Berlin und Umgebung. Direkt anfragen unter +49 176 141 22 627.';
 include(__DIR__ . '/includes/header.php');
-// include(__DIR__ . '/includes/contact-float.php'); // Dacă este folosit, poate fi inclus mai jos
 ?>
 
-<!-- CSS Critic pentru Homepage -->
-
-
-<!-- HERO SECTION -->
-<section class="hero-section">
-    <video class="hero-video"
-           autoplay
-           muted
-           loop
-           playsinline
-           preload="metadata"
-           >
-       
-        <source src="<?= $assets_path ?>video/hero-video.mp4" type="video/mp4">
+<section class="hero-section" aria-labelledby="home-title">
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/hero-mobile.jpg">
+        <source src="/assets/video/hero-video.mp4" type="video/mp4">
     </video>
-    <!-- Overlay -->
     <div class="hero-overlay"></div>
-    <!-- Content -->
     <div class="hero-content">
-        <h1>Herzlich Willkommen bei Der Hausmeister Michael GmbH</h1>
-        <h2>Wir schützen Ihr Eigentum im Neubau und Bestand durch das traditionelle Dachdeckerhandwerk.</h2>
-        <p>
-            Sind wir Ihr richtiger Ansprechpartner?<br>
-            Unser Ziel ist es, Ihre Wünsche umzusetzen!<br>
-            Im Laufe der Zeit muss ein Dach Regen, Sturm, Schnee und Hitze standhalten. Eine optimale Dachkonstruktion bietet dabei den notwendigen Schutz. Überlassen Sie die Qualität der Bedachung nicht dem Zufall, sondern kompetenten Fachkräften.<br>
-            Wir von der Dachdeckerei Michael sind sowohl für Privatkunden als auch für Unternehmen, Architekten und öffentliche Auftraggeber (Bund, Länder und Gemeinden) ein kompetenter Ansprechpartner für Bedachungen aller Art. Und mit Erfolg sind wir für zahlreiche Kunden im Raum <strong>Berlin, Brandenburg, Potsdam und Frankfurt (Oder)</strong> tätig.<br>
-            <strong>Dachdecker in Berlin & Brandenburg</strong> - von der kleinsten Dachreparatur bis zur kompletten Dacheindeckung.
-            <br><strong>Über 20 Jahre Erfahrung.</strong>
-            <br>Bund, Länder, Gemeinden & Privatkunden vertrauen uns.
-        </p>
-        <a href="contact.php" class="cta-button">Jetzt unverbindlich anfragen</a>
-        <!-- Trust Badges -->
-        <div class="trust-badges">
-            <span>🏆 20+ Jahre Meisterbetrieb</span>
-            <span>📍 Berlin · Potsdam · Frankfurt (Oder)</span>
-            <span>✅ Zertifiziert für öffentliche Aufträge</span>
+        <span class="hero-kicker">MB Bau Dienstleistungen · Berlin &amp; Umgebung</span>
+        <h1 id="home-title">Dacharbeiten, Fassaden &amp; Zaunbau aus einer Hand</h1>
+        <p class="hero-lead">Von der Reparatur bis zur neuen Eindeckung: Wir setzen Bau- und Instandhaltungsarbeiten zuverlässig, sauber und mit direkter Abstimmung um.</p>
+        <div class="hero-actions">
+            <a href="/contact.php" class="btn btn--primary"><i class="fas fa-file-signature"></i> Angebot anfragen</a>
+            <a href="tel:+4917614122627" class="btn btn--ghost"><i class="fas fa-phone"></i> +49 176 141 22 627</a>
         </div>
-    </div>
-    <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
-        <span></span>
+        <div class="trust-chips" aria-label="Vorteile">
+            <span><i class="fas fa-location-dot"></i> Berlin &amp; Umgebung</span>
+            <span><i class="fas fa-comments"></i> Direkter Kontakt</span>
+            <span><i class="fas fa-broom"></i> Saubere Ausführung</span>
+        </div>
     </div>
 </section>
 
- <!-- SERVICII RAPIDE - SECȚIUNE ÎMBUNĂTĂȚITĂ -->
-<section class="quick-services">
-    <div class="section-header">
-        <h2>Unsere Leistungen</h2>
-        <p class="subheading">Entdecken Sie unsere umfassenden Dachdecker-Dienstleistungen - von Neubau bis Nachhaltigkeit. Qualität und Zuverlässigkeit garantiert.</p>
-    </div>
-    <div class="services-container">
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fas fa-home"></i>
-                <h3>Neubau & Dachausbau</h3>
-                <p>Massivdächer, Holzdächer, Gauben & mehr - planen & bauen wir fachgerecht.</p>
-                <a href="services.php#neubau" class="card-link" aria-label="Mehr über Neubau & Dachausbau">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-tools"></i>
-                <h3>Reparatur & Wartung</h3>
-                <p>Von kleinen Reparaturen bis zur professionellen Dachwartung - wir halten Ihr Dach sicher.</p>
-                <a href="services.php#reparatur" class="card-link" aria-label="Mehr über Reparatur & Wartung">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-thermometer-half"></i>
-                <h3>Dämmung & Sanierung</h3>
-                <p>Energie sparen mit moderner Dachdämmung - staatlich gefördert.</p>
-                <a href="services.php#daemmung" class="card-link" aria-label="Mehr über Dämmung & Sanierung">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-solar-panel"></i>
-                <h3>Photovoltaik & Gründächer</h3>
-                <p>Nachhaltige Energie und ökologische Dachbegrünung aus einer Hand.</p>
-                <a href="services.php#hochdruck" class="card-link" aria-label="Mehr über Photovoltaik & Gründächer">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-building"></i>
-                <h3>Gauben & Dachausbau</h3>
-                <p>Mehr Raum, Licht und Komfort – planen und bauen wir individuelle Gauben und Dachausbauten.</p>
-                <a href="services.php#gauben" class="card-link" aria-label="Mehr über Gauben & Dachausbau">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
-            </div>
-        </div>
-    </div>
-    <div class="btn-container">
-        <a href="services.php" class="btn-secondary">Alle Dienstleistungen</a>
-    </div>
-</section>
-
-<!-- VIDEO PROJECTS CAROUSEL -->
-<section class="cinematic-carousel loading" role="region" aria-label="Projekte Video">
-  <div class="swiper videoProjectsSwiper">
-    <div class="swiper-wrapper">
-      <!-- Slide 1 – Dachsanierung -->
-      <div class="swiper-slide">
-        <div class="video-container">
-          <video class="bg-video" autoplay loop playsinline preload="metadata"
-                 >
-            <source src="<?= $assets_path ?>video/projects/project1.mp4" type="video/mp4">
-            <source src="<?= $assets_path ?>video/projects/project1.webm" type="video/webm">
-            Ihr Browser unterstützt kein Video-Tag.
-          </video>
-          <div class="video-overlay"></div>
-        </div>
-        <div class="slide-overlay">
-          <div class="slide-content">
-            <div class="content-wrapper">
-              <span class="project-tag">
-                <i class="icon-roof"></i> Dachsanierung
-              </span>
-              <h2 class="project-title">Moderne Dachsanierung mit Trapez-Blech</h2>
-              <p class="project-desc">
-                <span class="location">Berlin Mitte</span>
-                <span class="year">2024</span>
-              </p>
-              <div class="project-stats">
-                <div class="stat"><span class="stat-number">170</span><span class="stat-label">m²</span></div>
-                <div class="stat"><span class="stat-number">4</span><span class="stat-label">Tage</span></div>
-              </div>
-              <a href="contact.php" class="btn-explore">
-                <span>Jetzt Kostenvoranschlag anfragen</span>
-                <i class="icon-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Slide 2 – Altbau-Dachausbau -->
-      <div class="swiper-slide">
-        <div class="video-container">
-          <video class="bg-video" autoplay loop playsinline preload="metadata"
-                 >
-            <source src="<?= $assets_path ?>video/projects/project2.mp4" type="video/mp4">
-            <source src="<?= $assets_path ?>video/projects/project2.webm" type="video/webm">
-            Ihr Browser unterstützt kein Video-Tag.
-          </video>
-          <div class="video-overlay"></div>
-        </div>
-        <div class="slide-overlay">
-          <div class="slide-content">
-            <div class="content-wrapper">
-              <span class="project-tag">
-                <i class="icon-roof"></i> Dachausbau
-              </span>
-              <h2 class="project-title">Altbau-Dachausbau</h2>
-              <p class="project-desc">
-                <span class="location">Berlin Charlottenburg</span>
-                <span class="year">2023</span>
-              </p>
-              <div class="project-stats">
-                <div class="stat"><span class="stat-number">210</span><span class="stat-label">m²</span></div>
-                <div class="stat"><span class="stat-number">11</span><span class="stat-label">Tage</span></div>
-              </div>
-              <a href="contact.php" class="btn-explore">
-                <span>Jetzt Kostenvoranschlag anfragen</span>
-                <i class="icon-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Slide 3 – Hochdruckreinigung / Nano-Versiegelung -->
-      <div class="swiper-slide">
-        <div class="video-container">
-          <video class="bg-video" autoplay muted playsinline preload="metadata"
-                 >
-            <source src="<?= $assets_path ?>video/projects/project3.mp4" type="video/mp4">
-            <source src="<?= $assets_path ?>video/projects/project3.webm" type="video/webm">
-            Ihr Browser unterstützt kein Video-Tag.
-          </video>
-          <div class="video-overlay"></div>
-        </div>
-        <div class="slide-overlay">
-          <div class="slide-content">
-            <div class="content-wrapper">
-              <span class="project-tag">
-                <i class="icon-solar-panel"></i> Hochdruckreinigung & Nano-Versiegelung
-              </span>
-              <h2 class="project-title">Hochdruckreiniger</h2>
-              <p class="project-desc">
-                <span class="location">Potsdam</span>
-                <span class="year">2024</span>
-              </p>
-              <div class="project-stats">
-                <div class="stat"><span class="stat-number">140</span><span class="stat-label">m²</span></div>
-                <div class="stat"><span class="stat-number">3</span><span class="stat-label">Tage</span></div>
-              </div>
-              <a href="contact.php" class="btn-explore">
-                <span>Jetzt Kostenvoranschlag anfragen</span>
-                <i class="icon-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Slide 4 – Einfamilienhaus Neubau -->
-      <div class="swiper-slide">
-        <div class="video-container">
-          <video class="bg-video" autoplay loop playsinline preload="metadata"
-                 >
-            <source src="<?= $assets_path ?>video/projects/project4.mp4" type="video/mp4">
-            <source src="<?= $assets_path ?>video/projects/project4.webm" type="video/webm">
-            Ihr Browser unterstützt kein Video-Tag.
-          </video>
-          <div class="video-overlay"></div>
-        </div>
-        <div class="slide-overlay">
-          <div class="slide-content">
-            <div class="content-wrapper">
-              <span class="project-tag">
-                <i class="icon-home"></i> Neubau
-              </span>
-              <h2 class="project-title">Einfamilienhaus Neubau</h2>
-              <p class="project-desc">
-                <span class="location">Potsdam</span>
-                <span class="year">2024</span>
-              </p>
-              <div class="project-stats">
-                <div class="stat"><span class="stat-number">280</span><span class="stat-label">m²</span></div>
-                <div class="stat"><span class="stat-number">2</span><span class="stat-label">W</span></div>
-              </div>
-              <a href="contact.php" class="btn-explore">
-                <span>Jetzt Kostenvoranschlag anfragen</span>
-                <i class="icon-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Navigation -->
-    <div class="carousel-navigation">
-      <button class="swiper-button-prev" aria-label="Vorheriges Projekt"></button>
-      <button class="swiper-button-next" aria-label="Nächstes Projekt"></button>
-    </div>
-    <!-- Pagination -->
-    <div class="carousel-pagination">
-      <div class="swiper-pagination"></div>
-      <div class="pagination-progress">
-        <div class="progress-bar"></div>
-      </div>
-    </div>
-    <!-- Slide Counter -->
-    <div class="slide-counter">
-      <span class="current-slide">01</span><span class="divider">/</span><span class="total-slides">04</span>
-    </div>
-    <!-- Autoplay Progress -->
-    <div class="swiper-autoplay-progress">
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <circle cx="24" cy="24" r="20" stroke-dasharray="126" stroke-dashoffset="126"></circle>
-      </svg>
-      <span class="sr-only">Autoplay Fortschritt</span>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT SHORT SECTION -->
-<section class="about-short">
-    <div class="about-bg"></div>
+<section class="trust-strip" aria-label="MB Bau auf einen Blick">
     <div class="container">
-        <div class="about-content">
-            <h2>Unsere Philosophie – Qualität und Vertrauen</h2>
-            <p>
-                Wir legen großen Wert auf eine enge Zusammenarbeit mit unseren Kunden.
-                Von der Planung bis zur Fertigstellung arbeiten wir transparent, zuverlässig und termingerecht.
-            </p>
-            <p>
-                Unser Team aus erfahrenen <strong>Dachdeckern</strong>, <strong>Klempnern</strong> und <strong>Zimmerleuten</strong> sorgt dafür,
-                dass jedes Projekt mit höchster Präzision und Liebe zum Detail umgesetzt wird.
-            </p>
-            <a href="about.php" class="btn-secondary">Lerne unser Team kennen</a>
+        <div class="trust-item"><i class="fas fa-house"></i><div><strong>Dacharbeiten</strong><span>Reparatur, Eindeckung &amp; Abdichtung</span></div></div>
+        <div class="trust-item"><i class="fas fa-building"></i><div><strong>Fassadenarbeiten</strong><span>Schutz, Instandsetzung &amp; Verkleidung</span></div></div>
+        <div class="trust-item"><i class="fas fa-border-all"></i><div><strong>Zaunbau</strong><span>Montage &amp; individuelle Lösungen</span></div></div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">Leistungen</span>
+            <h2>Was wir für Ihr Objekt übernehmen</h2>
+            <p>Klare Leistungen, ein direkter Ansprechpartner und eine Ausführung, die zum Gebäude und zum Auftrag passt.</p>
+        </div>
+        <div class="card-grid">
+            <article class="feature-card">
+                <div class="icon-box"><i class="fas fa-house-chimney"></i></div>
+                <h3>Dacharbeiten</h3>
+                <p>Reparaturen, Neueindeckung, Abdichtung, Dachfenster, Gauben und Arbeiten an Dachrinnen.</p>
+                <a class="card-link" href="/services.php#dacharbeiten">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
+            </article>
+            <article class="feature-card">
+                <div class="icon-box"><i class="fas fa-building"></i></div>
+                <h3>Fassadenarbeiten</h3>
+                <p>Instandsetzung und Arbeiten an Fassaden mit Blick auf Schutz, Funktion und ein sauberes Erscheinungsbild.</p>
+                <a class="card-link" href="/services.php#fassade">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
+            </article>
+            <article class="feature-card">
+                <div class="icon-box"><i class="fas fa-border-all"></i></div>
+                <h3>Zaunbau</h3>
+                <p>Montage und Erneuerung von Zaunanlagen für Grundstücke, Einfahrten und Außenbereiche.</p>
+                <a class="card-link" href="/services.php#zaunbau">Mehr erfahren <i class="fas fa-arrow-right"></i></a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section section--soft">
+    <div class="container split">
+        <div class="content-block">
+            <span class="eyebrow">Dach im Fokus</span>
+            <h2>Vom kleinen Schaden bis zur umfassenden Dacharbeit</h2>
+            <p>Undichte Stellen, beschädigte Dachziegel oder ein Dach, das grundlegend überarbeitet werden soll: Wir schauen uns die Aufgabe an und besprechen den passenden nächsten Schritt.</p>
+            <ul class="check-list">
+                <li>Dachreparaturen und Wartungsarbeiten</li>
+                <li>Neueindeckung und Abdichtung</li>
+                <li>Dachfenster, Gauben und Dachrinnen</li>
+                <li>Reinigung und Pflege rund ums Dach</li>
+            </ul>
+            <div class="hero-actions" style="margin-top:28px;margin-bottom:0">
+                <a href="/services.php" class="btn btn--primary">Alle Leistungen</a>
+                <a href="/projects.php" class="btn btn--secondary">Projekte ansehen</a>
+            </div>
+        </div>
+        <div class="media-panel">
+            <img src="/assets/img/services/services-hero.webp" alt="Dacharbeiten von MB Bau Dienstleistungen" loading="lazy" width="900" height="650">
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">So arbeiten wir</span>
+            <h2>Einfach, nachvollziehbar und direkt</h2>
+        </div>
+        <div class="card-grid">
+            <article class="value-card"><div class="icon-box"><i class="fas fa-phone"></i></div><h3>1. Kontakt</h3><p>Sie schildern kurz, worum es geht. Fotos per WhatsApp helfen bei einer ersten Einschätzung.</p></article>
+            <article class="value-card"><div class="icon-box"><i class="fas fa-magnifying-glass"></i></div><h3>2. Abstimmung</h3><p>Wir klären Umfang, Zugang, Material und die nächsten Schritte für Ihren Auftrag.</p></article>
+            <article class="value-card"><div class="icon-box"><i class="fas fa-hammer"></i></div><h3>3. Ausführung</h3><p>Die Arbeiten werden sauber umgesetzt und transparent mit Ihnen abgestimmt.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="cta-band">
+    <div class="container">
+        <div>
+            <h2>Sie haben ein Projekt in Berlin oder Umgebung?</h2>
+            <p>Schicken Sie uns die wichtigsten Informationen – gerne auch direkt per WhatsApp.</p>
+        </div>
+        <div class="cta-actions">
+            <a href="https://wa.me/4917614122627" target="_blank" rel="noopener" class="btn btn--secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="/contact.php" class="btn btn--dark">Anfrage senden</a>
         </div>
     </div>
 </section>
