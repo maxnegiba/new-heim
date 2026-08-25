@@ -52,6 +52,7 @@ ob_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="<?= $assets_path ?>css/controlled-redesign.css?v=20260825-1">
+    <link rel="stylesheet" href="<?= $assets_path ?>css/video-fix.css?v=20260825-1">
 
     <style>
         html { overflow-y: scroll; }
@@ -62,6 +63,7 @@ ob_start();
     </style>
 
     <script src="<?= $assets_path ?>js/main.js" defer></script>
+    <script src="<?= $assets_path ?>js/video-fix.js?v=20260825-1" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer crossorigin></script>
     <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.5/dist/js/lightbox.min.js" defer crossorigin></script>
