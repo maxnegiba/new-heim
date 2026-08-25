@@ -1,6 +1,6 @@
 <?php
-$page_title = 'MB Bau Dienstleistungen | Dacharbeiten, Fassaden & Zaunbau Berlin';
-$page_description = 'MB Bau Dienstleistungen: Dacharbeiten, Fassadenarbeiten, Zaunbau, Reparaturen und Abdichtungen in Berlin und Umgebung. Direkt anfragen unter +49 176 141 22 627.';
+$page_title = 'Dachdecker Berlin Brandenburg | Klempner & Zimmermann | MB Bau Dienstleistungen';
+$page_description = 'Professionelle Dachdecker-, Klempner- und Zimmermannsarbeiten in Berlin & Brandenburg. Über 20 Jahre Erfahrung. Kostenlose Beratung und Angebot.';
 include(__DIR__ . '/includes/header.php');
 ?>
 
@@ -10,35 +10,53 @@ include(__DIR__ . '/includes/header.php');
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <span class="hero-kicker">MB Bau Dienstleistungen · Berlin &amp; Umgebung</span>
-        <h1 id="home-title">Dacharbeiten, Fassaden &amp; Zaunbau aus einer Hand</h1>
-        <p class="hero-lead">Von der Reparatur bis zur neuen Eindeckung: Wir setzen Bau- und Instandhaltungsarbeiten zuverlässig, sauber und mit direkter Abstimmung um.</p>
+        <span class="hero-kicker">MB Bau Dienstleistungen · Berlin &amp; Brandenburg</span>
+        <h1 id="home-title">Herzlich willkommen bei MB Bau Dienstleistungen</h1>
+        <p class="hero-lead">Wir schützen Ihr Eigentum im Neubau und Bestand durch traditionelles Dachdeckerhandwerk – von der kleinsten Dachreparatur bis zur kompletten Dacheindeckung.</p>
         <div class="hero-actions">
-            <a href="/contact.php" class="btn btn--primary"><i class="fas fa-file-signature"></i> Angebot anfragen</a>
+            <a href="/contact.php" class="btn btn--primary"><i class="fas fa-file-signature"></i> Jetzt unverbindlich anfragen</a>
             <a href="tel:+4917614122627" class="btn btn--ghost"><i class="fas fa-phone"></i> +49 176 141 22 627</a>
         </div>
-        <div class="trust-chips" aria-label="Vorteile">
-            <span><i class="fas fa-location-dot"></i> Berlin &amp; Umgebung</span>
-            <span><i class="fas fa-comments"></i> Direkter Kontakt</span>
-            <span><i class="fas fa-broom"></i> Saubere Ausführung</span>
+        <div class="trust-chips" aria-label="Vertrauen und Erfahrung">
+            <span><i class="fas fa-award"></i> 20+ Jahre Meisterbetrieb</span>
+            <span><i class="fas fa-location-dot"></i> Berlin · Potsdam · Frankfurt (Oder)</span>
+            <span><i class="fas fa-circle-check"></i> Zertifiziert für öffentliche Aufträge</span>
         </div>
     </div>
 </section>
 
 <section class="trust-strip" aria-label="MB Bau auf einen Blick">
     <div class="container">
-        <div class="trust-item"><i class="fas fa-house"></i><div><strong>Dacharbeiten</strong><span>Reparatur, Eindeckung &amp; Abdichtung</span></div></div>
-        <div class="trust-item"><i class="fas fa-building"></i><div><strong>Fassadenarbeiten</strong><span>Schutz, Instandsetzung &amp; Verkleidung</span></div></div>
-        <div class="trust-item"><i class="fas fa-border-all"></i><div><strong>Zaunbau</strong><span>Montage &amp; individuelle Lösungen</span></div></div>
+        <div class="trust-item"><i class="fas fa-house"></i><div><strong>Dachdeckerhandwerk</strong><span>Reparatur, Eindeckung &amp; Abdichtung</span></div></div>
+        <div class="trust-item"><i class="fas fa-people-group"></i><div><strong>Für private &amp; öffentliche Auftraggeber</strong><span>Bund, Länder, Gemeinden &amp; Privatkunden</span></div></div>
+        <div class="trust-item"><i class="fas fa-medal"></i><div><strong>Über 20 Jahre Erfahrung</strong><span>Kompetenz rund um Dach, Wand &amp; Abdichtung</span></div></div>
     </div>
 </section>
 
 <section class="section">
+    <div class="container split">
+        <div class="content-block">
+            <span class="eyebrow">Ihr Dach in guten Händen</span>
+            <h2>Qualität, die Ihr Gebäude langfristig schützt</h2>
+            <p>Im Laufe der Zeit muss ein Dach Regen, Sturm, Schnee und Hitze standhalten. Eine optimale Dachkonstruktion bietet dabei den notwendigen Schutz. Überlassen Sie die Qualität der Bedachung nicht dem Zufall, sondern kompetenten Fachkräften.</p>
+            <p>Wir sind sowohl für Privatkunden als auch für Unternehmen, Architekten und öffentliche Auftraggeber ein kompetenter Ansprechpartner für Bedachungen aller Art. Mit Erfolg sind wir für zahlreiche Kunden im Raum <strong>Berlin, Brandenburg, Potsdam und Frankfurt (Oder)</strong> tätig.</p>
+            <div class="hero-actions" style="margin-top:28px;margin-bottom:0">
+                <a href="/services.php" class="btn btn--primary">Leistungen ansehen</a>
+                <a href="/projects.php" class="btn btn--secondary">Projekte ansehen</a>
+            </div>
+        </div>
+        <div class="media-panel">
+            <img src="/assets/img/services/services-hero.webp" alt="Dachdeckerarbeiten von MB Bau Dienstleistungen" loading="lazy" width="900" height="650">
+        </div>
+    </div>
+</section>
+
+<section class="section section--soft">
     <div class="container">
         <div class="section-header">
             <span class="eyebrow">Leistungen</span>
-            <h2>Was wir für Ihr Objekt übernehmen</h2>
-            <p>Klare Leistungen, ein direkter Ansprechpartner und eine Ausführung, die zum Gebäude und zum Auftrag passt.</p>
+            <h2>Unsere Leistungen rund um Ihr Objekt</h2>
+            <p>Vom Dach über die Fassade bis zum Außenbereich erhalten Sie fachgerechte Lösungen aus einer Hand.</p>
         </div>
         <div class="card-grid">
             <article class="feature-card">
@@ -63,30 +81,33 @@ include(__DIR__ . '/includes/header.php');
     </div>
 </section>
 
-<section class="section section--soft">
+<section class="section">
     <div class="container split">
         <div class="content-block">
             <span class="eyebrow">Dach im Fokus</span>
-            <h2>Vom kleinen Schaden bis zur umfassenden Dacharbeit</h2>
-            <p>Undichte Stellen, beschädigte Dachziegel oder ein Dach, das grundlegend überarbeitet werden soll: Wir schauen uns die Aufgabe an und besprechen den passenden nächsten Schritt.</p>
+            <h2>Von der kleinen Reparatur bis zur kompletten Dacheindeckung</h2>
+            <p>Unser Team aus erfahrenen Dachdeckern, Klempnern und Zimmerleuten sorgt dafür, dass jedes Projekt mit Präzision und hohem Qualitätsbewusstsein umgesetzt wird.</p>
             <ul class="check-list">
                 <li>Dachreparaturen und Wartungsarbeiten</li>
                 <li>Neueindeckung und Abdichtung</li>
                 <li>Dachfenster, Gauben und Dachrinnen</li>
+                <li>Klempner- und Zimmermannsarbeiten</li>
                 <li>Reinigung und Pflege rund ums Dach</li>
             </ul>
-            <div class="hero-actions" style="margin-top:28px;margin-bottom:0">
-                <a href="/services.php" class="btn btn--primary">Alle Leistungen</a>
-                <a href="/projects.php" class="btn btn--secondary">Projekte ansehen</a>
-            </div>
         </div>
-        <div class="media-panel">
-            <img src="/assets/img/services/services-hero.webp" alt="Dacharbeiten von MB Bau Dienstleistungen" loading="lazy" width="900" height="650">
+        <div class="content-block">
+            <span class="eyebrow">Warum MB Bau</span>
+            <h2>Erfahrung, Verlässlichkeit und direkte Abstimmung</h2>
+            <div class="card-grid" style="grid-template-columns:1fr;gap:16px">
+                <article class="value-card"><div class="icon-box"><i class="fas fa-award"></i></div><h3>20+ Jahre Erfahrung</h3><p>Langjährige Erfahrung im Dachdeckerhandwerk und bei anspruchsvollen Bauaufgaben.</p></article>
+                <article class="value-card"><div class="icon-box"><i class="fas fa-landmark"></i></div><h3>Öffentliche Auftraggeber</h3><p>Erfahrung mit Aufträgen für Bund, Länder und Gemeinden sowie für private und gewerbliche Kunden.</p></article>
+                <article class="value-card"><div class="icon-box"><i class="fas fa-comments"></i></div><h3>Direkter Kontakt</h3><p>Klare Abstimmung vom ersten Gespräch bis zur Fertigstellung.</p></article>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="section">
+<section class="section section--soft">
     <div class="container">
         <div class="section-header">
             <span class="eyebrow">So arbeiten wir</span>
@@ -103,8 +124,8 @@ include(__DIR__ . '/includes/header.php');
 <section class="cta-band">
     <div class="container">
         <div>
-            <h2>Sie haben ein Projekt in Berlin oder Umgebung?</h2>
-            <p>Schicken Sie uns die wichtigsten Informationen – gerne auch direkt per WhatsApp.</p>
+            <h2>Sie haben ein Projekt in Berlin oder Brandenburg?</h2>
+            <p>Kontaktieren Sie uns für eine kostenlose Beratung und ein individuelles Angebot.</p>
         </div>
         <div class="cta-actions">
             <a href="https://wa.me/4917614122627" target="_blank" rel="noopener" class="btn btn--secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
