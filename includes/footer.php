@@ -1,17 +1,15 @@
+</main>
 <footer class="footer">
     <div class="container">
         <div class="footer-column">
-            <h3>michael GmbH</h3>
-            <p>Ihr zuverlässiger Dachdecker in Berlin und Umgebung.</p>
-            <p>Meisterbetrieb seit 1995</p>
+            <h3>MB Bau Dienstleistungen</h3>
+            <p>Ihr zuverlässiger Partner für Dacharbeiten, Fassadenarbeiten und Zaunbau in Berlin und Umgebung.</p>
         </div>
         <div class="footer-column">
             <h3>Kontakt</h3>
-            <p><i class="fas fa-map-marker-alt"></i>Landsberger Allee 366, 12681 Berlin, Deutschland</p>
-            <p><i class="fas fa-phone"></i> <a href="tel:+491626781242">+49 162 6781242</a></p>
-            <p><i class="fas fa-envelope"></i> <a href="mailto:info@hausmeistermichael-gmbh.de
-">info@hausmeistermichael-gmbh.de
-</a></p>
+            <p><i class="fas fa-map-marker-alt"></i> Landsberger Allee 366, 12681 Berlin, Deutschland</p>
+            <p><i class="fas fa-phone"></i> <a href="tel:+4917614122627">+49 176 141 22 627</a></p>
+            <p><i class="fas fa-envelope"></i> <a href="mailto:info@hausmeistermichael-gmbh.de">info@hausmeistermichael-gmbh.de</a></p>
         </div>
         <div class="footer-column">
             <h3>Öffnungszeiten</h3>
@@ -21,21 +19,17 @@
         </div>
     </div>
     <div class="copyright">
-        <p>&copy; 2025 MeisterDach GmbH. Alle Rechte vorbehalten.</p>
+        <p>&copy; 2026 MB Bau Dienstleistungen. Alle Rechte vorbehalten.</p>
     </div>
 </footer>
 
-<!-- Floating Buttons -->
 <div class="floating-buttons">
-    <button class="main-button"><i class="fas fa-phone"></i></button>
+    <button class="main-button" aria-label="Kontaktoptionen öffnen"><i class="fas fa-phone"></i></button>
     <div class="sub-buttons">
-        <a href="tel:+491626781242" class="sub-button"><i class="fas fa-phone"></i></a>
-        <a href="https://wa.me/491626781242" class="sub-button"><i class="fab fa-whatsapp"></i></a>
-        <a href="mailto:info@hausmeistermichael-gmbh.de
-" class="sub-button"><i class="fas fa-envelope"></i></a>
+        <a href="tel:+4917614122627" class="sub-button" aria-label="Anrufen"><i class="fas fa-phone"></i></a>
+        <a href="https://wa.me/4917614122627" class="sub-button" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:info@hausmeistermichael-gmbh.de" class="sub-button" aria-label="E-Mail"><i class="fas fa-envelope"></i></a>
     </div>
 </div>
-
-
 </body>
 </html>
