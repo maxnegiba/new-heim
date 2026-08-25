@@ -1,119 +1,173 @@
-
-// lazy-load batch-uri
-let loadedCount = 12;
-const batchSize = 12;
+const allProjects = Array.isArray(window.allProjects) ? window.allProjects : [];
+const totalProjects = Number(window.totalProjects || allProjects.length || 0);
 const gallery = document.getElementById('gallery');
 const loader = document.getElementById('loader');
-let isLoading = false; // Flag pentru a preveni apeluri multiple la scroll rapid
-
-// Accesează array-ul de pe window (setat în PHP)
-const allProjects = window.allProjects;
-
-function loadMore() {
-    if (loadedCount >= allProjects.length || isLoading) return;
-    isLoading = true;
-    loader.style.display = 'block';
-    const next = allProjects.slice(loadedCount, loadedCount + batchSize);
-    next.forEach((p, localIndex) => {
-        const globalIndex = loadedCount + localIndex; // Calcul index global
-        const card = document.createElement('div');
-        card.className = 'project-card';
-        card.innerHTML = `
-            <picture>
-                <source type="image/webp" srcset="${p.webp} 1x, ${p.webp2x} 2x">
-                <img src="${p.src}" srcset="${p.src2x} 2x" loading="lazy" 
-                     data-full="${p.src2x}" alt="${p.title}">
-            </picture>
-            <div class="overlay"><span>${p.title}</span></div>`;
-        card.addEventListener('click', () => openModal(globalIndex));
-        gallery.appendChild(card);
-    });
-    loadedCount += next.length;
-    document.getElementById('loaded').textContent = loadedCount;
-    if (loadedCount >= allProjects.length) loader.style.display = 'none';
-    isLoading = false;
-}
-
-// Încarcă mai mult la scroll (cu check pentru a evita duplicări)
-window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-        loadMore();
-    }
-});
-
-// Atașează listener pe cardurile inițiale (primele 12)
-document.querySelectorAll('.project-card').forEach((card, index) => {
-    card.addEventListener('click', () => openModal(index));
-});
-
-// Lightbox
-let currentIndex = 0;
+const loadedLabel = document.getElementById('loaded');
 const modal = document.getElementById('projectModal');
 const modalImg = document.getElementById('modalImg');
 const caption = document.getElementById('modalCaption');
-function openModal(i) {
-    currentIndex = i;
-    modalImg.src = allProjects[i].src2x;
-    caption.textContent = allProjects[i].title;
-    modal.style.display = 'block';
+const closeButton = modal?.querySelector('.close');
+const previousButton = modal?.querySelector('.arrow.left');
+const nextButton = modal?.querySelector('.arrow.right');
+
+let loadedCount = Math.min(12, allProjects.length);
+let currentIndex = 0;
+let swiper = null;
+let loading = false;
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
-document.querySelector('.close').onclick = () => modal.style.display = 'none';
-document.querySelector('.arrow.left').onclick = () => {
-    currentIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
-    openModal(currentIndex);
-};
-document.querySelector('.arrow.right').onclick = () => {
-    currentIndex = (currentIndex + 1) % allProjects.length;
-    openModal(currentIndex);
-};
 
+function createProjectSlide(project, index) {
+  const slide = document.createElement('div');
+  slide.className = 'project-card swiper-slide';
+  slide.dataset.index = String(index);
+  slide.innerHTML = `
+    <picture>
+      <source type="image/webp" srcset="${escapeHtml(project.webp)} 1x, ${escapeHtml(project.webp2x)} 2x">
+      <img src="${escapeHtml(project.src)}"
+           srcset="${escapeHtml(project.src2x)} 2x"
+           loading="lazy"
+           data-full="${escapeHtml(project.src2x)}"
+           alt="${escapeHtml(project.title)}">
+    </picture>
+    <div class="overlay"><span>${escapeHtml(project.title)}</span></div>
+  `;
+  slide.addEventListener('click', () => openModal(index));
+  return slide;
+}
 
-// ... codul tău existent ...
+function loadMore() {
+  if (!swiper || loading || loadedCount >= allProjects.length) return;
 
-// Inițializează VeluxSwiper
-document.addEventListener('DOMContentLoaded', () => {
-  const veluxSwiper = new VeluxSwiper(); // Apel noua clasă
+  loading = true;
+  if (loader) loader.style.display = 'block';
 
-  // Debug: Verifică încărcarea media (similar cu Gauben)
-  const videos = document.querySelectorAll('.veluxVideoSwiper video');
-  videos.forEach((video, index) => {
-    video.addEventListener('loadeddata', () => console.log(`Velux Video ${index + 1} loaded`));
-    video.addEventListener('error', () => console.error(`Velux Video ${index + 1} failed to load`));
+  const nextProjects = allProjects.slice(loadedCount, loadedCount + 12);
+  const slides = nextProjects.map((project, localIndex) =>
+    createProjectSlide(project, loadedCount + localIndex)
+  );
+
+  swiper.appendSlide(slides);
+  loadedCount += slides.length;
+
+  if (loadedLabel) loadedLabel.textContent = String(loadedCount);
+  if (loader) loader.style.display = loadedCount < allProjects.length ? 'block' : 'none';
+
+  loading = false;
+}
+
+function openModal(index) {
+  if (!modal || !modalImg || !caption || !allProjects[index]) return;
+  currentIndex = index;
+  modalImg.src = allProjects[index].src2x || allProjects[index].src;
+  modalImg.alt = allProjects[index].title || '';
+  caption.textContent = allProjects[index].title || '';
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  if (!modal) return;
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function showPrevious() {
+  if (!allProjects.length) return;
+  currentIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
+  openModal(currentIndex);
+}
+
+function showNext() {
+  if (!allProjects.length) return;
+  currentIndex = (currentIndex + 1) % allProjects.length;
+  openModal(currentIndex);
+}
+
+function bindInitialCards() {
+  gallery?.querySelectorAll('.project-card').forEach((card) => {
+    const index = Number(card.dataset.index || 0);
+    card.addEventListener('click', () => openModal(index));
   });
+}
 
-  const images = document.querySelectorAll('.velux-photo-grid img');
-  images.forEach((img, index) => {
-    img.addEventListener('load', () => console.log(`Velux Image ${index + 1} loaded`));
-    img.addEventListener('error', () => console.error(`Velux Image ${index + 1} failed to load`));
+function initCarousel() {
+  if (!gallery || !window.Swiper || swiper) return;
+
+  swiper = new window.Swiper(gallery, {
+    slidesPerView: 1,
+    spaceBetween: 22,
+    speed: 650,
+    grabCursor: true,
+    watchSlidesProgress: true,
+    loop: false,
+    keyboard: {
+      enabled: true,
+      onlyInViewport: true,
+    },
+    pagination: {
+      el: gallery.querySelector('.swiper-pagination'),
+      clickable: true,
+      dynamicBullets: true,
+    },
+    navigation: {
+      nextEl: gallery.querySelector('.swiper-button-next'),
+      prevEl: gallery.querySelector('.swiper-button-prev'),
+    },
+    breakpoints: {
+      700: {
+        slidesPerView: 2,
+        spaceBetween: 22,
+      },
+      1100: {
+        slidesPerView: 3,
+        spaceBetween: 24,
+      },
+    },
+    on: {
+      reachEnd() {
+        loadMore();
+      },
+    },
   });
+}
+
+function waitForSwiper(tries = 0) {
+  if (!gallery) return;
+  if (window.Swiper) {
+    initCarousel();
+    return;
+  }
+  if (tries < 80) {
+    window.setTimeout(() => waitForSwiper(tries + 1), 75);
+  }
+}
+
+bindInitialCards();
+waitForSwiper();
+
+closeButton?.addEventListener('click', closeModal);
+previousButton?.addEventListener('click', showPrevious);
+nextButton?.addEventListener('click', showNext);
+
+modal?.addEventListener('click', (event) => {
+  if (event.target === modal) closeModal();
 });
 
-// Noua clasă pentru Velux Swiper
-export class VeluxSwiper {
-  constructor() {
-    this.init();
-  }
+document.addEventListener('keydown', (event) => {
+  if (!modal || modal.style.display !== 'block') return;
+  if (event.key === 'Escape') closeModal();
+  if (event.key === 'ArrowLeft') showPrevious();
+  if (event.key === 'ArrowRight') showNext();
+});
 
-  init() {
-    const el = document.querySelector('.veluxVideoSwiper');
-    if (!el) return;
-
-    new Swiper(el, {
-      loop: true,
-      spaceBetween: 10,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      autoplay: {
-        delay: 6000,
-        disableOnInteraction: false,
-      },
-      breakpoints: {
-        640: { slidesPerView: 1 }, // Mobil: 1
-        768: { slidesPerView: 2 }, // Tablet: 2
-        1024: { slidesPerView: 3 }, // Desktop: Toate 3 (ca să vezi toate fără swipe)
-      },
-    });
-  }
+if (totalProjects <= loadedCount && loader) {
+  loader.style.display = 'none';
 }
