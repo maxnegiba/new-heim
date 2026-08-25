@@ -70,21 +70,26 @@ $assets_path = '/assets/';
                 <p>Momentan nu sunt proiecte disponibile.</p>
             </div>
         <?php else: ?>
-            <div id="gallery" data-total="<?= $total ?>">
-                <?php foreach (array_slice($projects, 0, 12) as $i => $p): ?>
-                    <div class="project-card" data-index="<?= $i ?>">
-                        <picture>
-                            <source type="image/webp"
-                                    srcset="<?= htmlspecialchars($p['webp']) ?> 1x, <?= htmlspecialchars($p['webp2x']) ?> 2x">
-                            <img src="<?= htmlspecialchars($p['src']) ?>"
-                                 srcset="<?= htmlspecialchars($p['src2x']) ?> 2x"
-                                 loading="lazy"
-                                 data-full="<?= htmlspecialchars($p['src2x']) ?>"
-                                 alt="<?= htmlspecialchars($p['title']) ?>">
-                        </picture>
-                        <div class="overlay"><span><?= htmlspecialchars($p['title']) ?></span></div>
-                    </div>
-                <?php endforeach; ?>
+            <div id="gallery" class="swiper projectGallerySwiper" data-total="<?= $total ?>">
+                <div class="swiper-wrapper">
+                    <?php foreach (array_slice($projects, 0, 12) as $i => $p): ?>
+                        <div class="project-card swiper-slide" data-index="<?= $i ?>">
+                            <picture>
+                                <source type="image/webp"
+                                        srcset="<?= htmlspecialchars($p['webp']) ?> 1x, <?= htmlspecialchars($p['webp2x']) ?> 2x">
+                                <img src="<?= htmlspecialchars($p['src']) ?>"
+                                     srcset="<?= htmlspecialchars($p['src2x']) ?> 2x"
+                                     loading="lazy"
+                                     data-full="<?= htmlspecialchars($p['src2x']) ?>"
+                                     alt="<?= htmlspecialchars($p['title']) ?>">
+                            </picture>
+                            <div class="overlay"><span><?= htmlspecialchars($p['title']) ?></span></div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next" aria-label="Nächstes Projekt"></div>
+                <div class="swiper-button-prev" aria-label="Vorheriges Projekt"></div>
             </div>
             
             <?php if ($total > 12): ?>
